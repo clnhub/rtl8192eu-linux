@@ -1,25 +1,39 @@
-# rtl8192eu-linux
-rtl8192eu Linux driver v5.2.19.1
+## rtl8192eu-linux
+Realtek rtl8192eu official Linux driver v5.2.19.1
 
-This driver is based on the official Realtek v5.2.19.1 driver with fixes and improvements to support the latest kernels (up to 4.17).
+This driver is based on the (latest) official Realtek v5.2.19.1 driver with fixes and improvements to support the latest kernels (up to 4.19).
 
-### Unload and remove old driver(s)
+### Automated install 
 
-* Check old loaded drivers with `sudo lshw -C network` and unload with `sudo rmmod 8192eu` or `sudo rmmod rtl8xxxu` or use a custom module name. Clean installs of Ubuntu use the rtl8xxxu driver.
+Run from driver directory
 
-* Check dkms status with `dkms status` and remove with `sudo dkms remove rtl8192eu/1.0 --all` or use a custom driver version or name.
+./install_wifi.sh
 
-* Check/blacklist rtl8xxxu driver (if available) by adding `blacklist rtl8xxxu` to any .conf file in the /etc/modprobe.d directory.
+### Manual install
 
-### Install new driver
+Remove available drivers with (skip if `sudo lshw -C network` ànd `dkms status` do not show any wifi drivers):
 
-Clone/extract and cd into main driver directory and run add and install commands:
+```
+sudo rmmod 8192eu
+sudo rmmod rtl8xxxu
+sudo dkms remove rtl8192eu/1.0 --all
+```
+
+Blacklist default driver (rtl8xxxu on Ubuntu)
+
+```
+echo "blacklist rtl8xxxu" >> ./blacklist-rtl8xxxu.conf
+sudo mv ./blacklist-rtl8xxxu.conf /etc/modprobe.d/
+```
+
+Run add and install commands from driver directory:
 
 ```
 sudo dkms add .
 sudo dkms install rtl8192eu/1.0
 ```
-### Load driver (or reboot)
+
+Load driver (or reboot)
 
 `sudo modprobe 8192eu`
 
