@@ -5,7 +5,7 @@ This driver is based on the (latest) official Realtek v5.2.19.1 driver with fixe
 
 ### Automated install 
 
-Run from driver directory
+Run from driver directory:
 
 ./install_wifi.sh
 
@@ -19,7 +19,7 @@ sudo rmmod rtl8xxxu
 sudo dkms remove rtl8192eu/1.0 --all
 ```
 
-Blacklist default driver (rtl8xxxu on Ubuntu)
+Blacklist default driver (rtl8xxxu on Ubuntu):
 
 ```
 echo "blacklist rtl8xxxu" >> ./blacklist-rtl8xxxu.conf
@@ -33,7 +33,7 @@ sudo dkms add .
 sudo dkms install rtl8192eu/1.0
 ```
 
-Load driver (or reboot)
+Load driver (or reboot):
 
 `sudo modprobe 8192eu`
 
