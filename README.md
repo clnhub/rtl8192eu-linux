@@ -5,13 +5,15 @@ This driver is based on the official Realtek v5.2.19.1 driver with fixes and imp
 
 ### Unload and remove old driver(s)
 
-* Check old loaded drivers with `sudo lshw -C network` and unload with `sudo rmmod 8192eu` or `sudo rmmod rtl8xxxu` or use a custom module name.
+* Check old loaded drivers with `sudo lshw -C network` and unload with `sudo rmmod 8192eu` or `sudo rmmod rtl8xxxu` or use a custom module name. Clean installs of Ubuntu use the rtl8xxxu driver.
 
 * Check dkms status with `dkms status` and remove with `sudo dkms remove rtl8192eu/1.0 --all` or use a custom driver version or name.
 
+* Check/blacklist rtl8xxxu driver (if available) by adding `blacklist rtl8xxxu` to any .conf file in the /etc/modprobe.d directory.
+
 ### Install new driver
 
-Clone, extract and cd into main driver directory and run add and install commands:
+Clone/extract and cd into main driver directory and run add and install commands:
 
 ```
 sudo dkms add .
