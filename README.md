@@ -11,7 +11,7 @@ Run from driver directory:
 
 ### Manual install
 
-Remove available drivers with (skip if `sudo lshw -C network` ànd `dkms status` do not show any wifi drivers):
+Remove available drivers with (skip if `sudo lshw -C network` and `dkms status` do not show any wifi drivers):
 
 ```
 sudo rmmod 8192eu
