@@ -5,7 +5,7 @@ This driver is based on the (latest) official Realtek v5.2.19.1 driver with fixe
 
 ### Before installing
 
-Make sure you have headers, dkms and git packages installed.
+Make sure you have headers, build, dkms and git packages installed.
 
 Check:
 
