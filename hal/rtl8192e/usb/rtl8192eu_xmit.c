@@ -254,6 +254,31 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz , u8 ba
 #ifdef CONFIG_ANTENNA_DIVERSITY
 	odm_set_tx_ant_by_tx_info(&pHalData->odmpriv, ptxdesc, pxmitframe->attrib.mac_id);
 #endif
+/* injected frame */
+	if(pattrib->inject == 0xa5) {
+		SET_TX_DESC_RETRY_LIMIT_ENABLE_92E(ptxdesc, 1);
+		if (pattrib->retry_ctrl == _TRUE) {
+			SET_TX_DESC_DATA_RETRY_LIMIT_92E(ptxdesc, 6);
+		} else {
+			SET_TX_DESC_DATA_RETRY_LIMIT_92E(ptxdesc, 0);
+		}
+		if(pattrib->sgi == _TRUE) {
+			SET_TX_DESC_DATA_SHORT_92E(ptxdesc, 1);
+		} else {
+			SET_TX_DESC_DATA_SHORT_92E(ptxdesc, 0);
+		}
+		SET_TX_DESC_USE_RATE_92E(ptxdesc, 1);
+		SET_TX_DESC_TX_RATE_92E(ptxdesc, MRateToHwRate(pattrib->rate));
+		if (pattrib->ldpc)
+			SET_TX_DESC_DATA_LDPC_92E(ptxdesc, 1);
+		SET_TX_DESC_DATA_STBC_92E(ptxdesc, pattrib->stbc & 3);
+		//SET_TX_DESC_GF_92E(ptxdesc, 1); // no MCS rates if sets, GreenField?
+		//SET_TX_DESC_LSIG_TXOP_EN_92E(ptxdesc, 1);
+		//SET_TX_DESC_HTC_92E(ptxdesc, 1);
+		//SET_TX_DESC_NO_ACM_92E(ptxdesc, 1);
+		SET_TX_DESC_DATA_BW_92E(ptxdesc, pattrib->bwmode); // 0 - 20 MHz, 1 - 40 MHz, 2 - 80 MHz
+	}
+
 
 	rtl8192e_cal_txdesc_chksum(ptxdesc);
 	_dbg_dump_tx_info(padapter, pxmitframe->frame_tag, ptxdesc);
@@ -387,6 +412,7 @@ static s32 rtw_dump_xframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 
 		/* RTW_INFO("rtw_write_port, w_sz=%d, sz=%d, txdesc_sz=%d, tid=%d\n", w_sz, sz, w_sz-sz, pattrib->priority);       */
 
+		RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_write_port, w_sz=%d\n", w_sz));
 		mem_addr += w_sz;
 
 		mem_addr = (u8 *)RND4(((SIZE_PTR)(mem_addr)));
@@ -983,7 +1009,7 @@ s32 rtl8192eu_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt)
 	pipe = usb_sndbulkpipe(pdvobj->pusbdev, pHalData->Queue2EPNum[(u8)MGT_QUEUE_INX] & 0x0f);
 
 	usb_fill_bulk_urb(urb, pdvobj->pusbdev, pipe,
-		pxmit_skb->data, pxmit_skb->len, rtl8192eu_hostap_mgnt_xmit_cb, pxmit_skb);
+	pxmit_skb->data, pxmit_skb->len, rtl8192eu_hostap_mgnt_xmit_cb, pxmit_skb);
 
 	urb->transfer_flags |= URB_ZERO_PACKET;
 	usb_anchor_urb(urb, &phostapdpriv->anchored);
