@@ -3359,19 +3359,19 @@ static ssize_t rtw_mcc_proc_write(struct file *file, const char __user *buffer, 
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0))
 static const struct proc_ops rtw_mcc_proc_seq_fops = {
-	.proc_open = rtw_drv_proc_open,
+	.proc_open = rtw_mcc_proc_open,
 	.proc_read = seq_read,
 	.proc_lseek = seq_lseek,
 	.proc_release = single_release,
-	.proc_write = rtw_drv_proc_write,
+	.proc_write = rtw_mcc_proc_write,
 };
 
 static const struct proc_ops rtw_mcc_proc_sseq_fops = {
-	.proc_open = rtw_drv_proc_open,
+	.proc_open = rtw_mcc_proc_open,
 	.proc_read = seq_read,
 	.proc_lseek = seq_lseek,
 	.proc_release = single_release,
-	.proc_write = rtw_drv_proc_write,
+	.proc_write = rtw_mcc_proc_write,
 };
 #else
 
