@@ -4206,6 +4206,17 @@ static void do_queue_select(_adapter	*padapter, struct pkt_attrib *pattrib)
 #endif /* CONFIG_MCC_MODE */
 }
 
+static inline void dump_buf(u8 *buf, u32 len)
+{
+	u32 i;
+	printk("-----------------Len %d----------------\n", len);
+	for(i=0; i<len; i++)
+		printk("%2.2x-", *(buf+i));
+	printk("\n");
+}
+
+
+
 /*
  * The main transmit(tx) entry
  *
@@ -4214,7 +4225,30 @@ static void do_queue_select(_adapter	*padapter, struct pkt_attrib *pattrib)
  *	0	success, hardware will handle this xmit frame(packet)
  *	<0	fail
  */
- #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 24))
+ 
+int rtw_ieee80211_radiotap_iterator_next(struct ieee80211_radiotap_iterator *iterator);
+void update_monitor_frame_attrib(_adapter *padapter, struct pkt_attrib *pattrib);
+int rtw_ieee80211_radiotap_iterator_init(
+	struct ieee80211_radiotap_iterator *iterator,
+	struct ieee80211_radiotap_header *radiotap_header,
+	int max_length, const struct ieee80211_radiotap_vendor_namespaces *vns);
+
+static struct xmit_frame* monitor_alloc_mgtxmitframe(struct xmit_priv *pxmitpriv) {
+	int tries;
+	int delay = 300;
+	struct xmit_frame *pmgntframe = NULL;
+
+	for(tries = 3; tries >= 0; tries--) {
+		pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+		if(pmgntframe != NULL)
+			return pmgntframe;
+		rtw_udelay_os(delay);
+		delay += delay/2;
+	}
+	return NULL;
+}
+
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 24))
 s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 {
 	int ret = 0;
@@ -4226,9 +4260,25 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	u16 frame_ctl;
 	unsigned char src_mac_addr[6];
 	unsigned char dst_mac_addr[6];
-	struct rtw_ieee80211_hdr *dot11_hdr;
+ 	struct ieee80211_hdr *dot11_hdr;
 	struct ieee80211_radiotap_header *rtap_hdr;
+	struct ieee80211_radiotap_iterator iterator;
+	u8 fixed_rate = MGN_1M, sgi = 0, bwidth = 0, ldpc = 0, stbc = 0;
+	u16 txflags = 0;	
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(ndev);
+
+	struct xmit_frame		*pmgntframe;
+	struct pkt_attrib	*pattrib;
+	unsigned char	*pframe;
+	struct rtw_ieee80211_hdr *pwlanhdr;
+	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
+	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
+	u8 *buf = skb->data;
+	u32 len = skb->len;
+	u8 category, action;
+	int type = -1;
+
+	//RTW_INFO(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));
 
 	if (skb)
 		rtw_mstat_update(MSTAT_TYPE_SKB, MSTAT_ALLOC_SUCCESS, skb->truesize);
@@ -4244,108 +4294,125 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	if (unlikely(skb->len < rtap_len))
 		goto fail;
 
-	if (rtap_len != 12) {
-		RTW_INFO("radiotap len (should be 14): %d\n", rtap_len);
-		goto fail;
+	if ((pmgntframe = monitor_alloc_mgtxmitframe(pxmitpriv)) == NULL) {
+		DBG_COUNTER(padapter->tx_logs.core_tx_err_pxmitframe);
+		return NETDEV_TX_BUSY;
 	}
 
+	ret = rtw_ieee80211_radiotap_iterator_init(&iterator, rtap_hdr, skb->len, NULL);
+	while (!ret) {
+		ret = rtw_ieee80211_radiotap_iterator_next(&iterator);
+
+		if (ret)
+			continue;
+
+		/* see if this argument is something we can use */
+		switch (iterator.this_arg_index) {
+
+		case IEEE80211_RADIOTAP_RATE:		/* u8 */
+			fixed_rate = *iterator.this_arg;
+			break;
+
+		case IEEE80211_RADIOTAP_TX_FLAGS:
+			txflags = get_unaligned_le16(iterator.this_arg);
+			break;
+
+		case IEEE80211_RADIOTAP_MCS: {		/* u8,u8,u8 */
+			u8 mcs_have = iterator.this_arg[0];
+			if (mcs_have & IEEE80211_RADIOTAP_MCS_HAVE_MCS) {
+				fixed_rate = iterator.this_arg[2] & 0x7f;
+				if(fixed_rate > 31)
+					fixed_rate = 0;
+				fixed_rate += MGN_MCS0;
+			}
+			if ((mcs_have & 4) && 
+			    (iterator.this_arg[1] & 4))
+				sgi = 1;
+			if ((mcs_have & 1) && 
+			    (iterator.this_arg[1] & 1))
+				bwidth = 1;
+			if ((mcs_have & 0x10) && 
+			    (iterator.this_arg[1] & 0x10))
+				ldpc = 1;
+			if ((mcs_have & 0x20))
+				stbc = (iterator.this_arg[1] >> 5) & 3;	
+		}
+		break;
+
+		case IEEE80211_RADIOTAP_VHT: {
+		/* u16 known, u8 flags, u8 bandwidth, u8 mcs_nss[4], u8 coding, u8 group_id, u16 partial_aid */
+			u8 known = iterator.this_arg[0];
+			u8 flags = iterator.this_arg[2];
+			unsigned int mcs, nss;
+			if((known & 4) && (flags & 4))
+				sgi = 1;
+			if((known & 1) && (flags & 1))
+				stbc = 1;
+			if(known & 0x40) {
+				bwidth = iterator.this_arg[3] & 0x1f;
+				if(bwidth>=1 && bwidth<=3)
+					bwidth = 1; // 40 MHz
+				else if(bwidth>=4 && bwidth<=10)
+					bwidth = 2;	// 80 MHz
+				else
+					bwidth = 0; // 20 MHz
+			}
+			if(iterator.this_arg[8] & 1)
+				ldpc = 1;
+			mcs = (iterator.this_arg[4]>>4) & 0x0f;
+			nss = iterator.this_arg[4] & 0x0f;
+			if(nss > 0) {
+				if(nss > 4) nss = 4;
+				if(mcs > 9) mcs = 9;
+				fixed_rate = MGN_VHT1SS_MCS0 + ((nss-1)*10 + mcs);
+			}
+		}
+		break;
+
+		default:
+			break;
+		}
+	}
 	/* Skip the ratio tap header */
 	skb_pull(skb, rtap_len);
 
-	dot11_hdr = (struct rtw_ieee80211_hdr *)skb->data;
-	frame_ctl = le16_to_cpu(dot11_hdr->frame_ctl);
+	//	dot11_hdr = (struct ieee80211_hdr *)skb->data;
+	//	frame_ctl = le16_to_cpu(dot11_hdr->frame_control);
 	/* Check if the QoS bit is set */
 
-	if ((frame_ctl & RTW_IEEE80211_FCTL_FTYPE) == RTW_IEEE80211_FTYPE_DATA) {
+	pattrib = &pmgntframe->attrib;
+	update_monitor_frame_attrib(padapter, pattrib);
 
-		struct xmit_frame		*pmgntframe;
-		struct pkt_attrib	*pattrib;
-		unsigned char	*pframe;
-		struct rtw_ieee80211_hdr *pwlanhdr;
-		struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
-		struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
-		u8 *buf = skb->data;
-		u32 len = skb->len;
-		u8 category, action;
-		int type = -1;
+	_rtw_memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
 
-		pmgntframe = alloc_mgtxmitframe(pxmitpriv);
-		if (pmgntframe == NULL) {
-			rtw_udelay_os(500);
-			goto fail;
-		}
-		pattrib = &pmgntframe->attrib;
+	pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
 
-		update_monitor_frame_attrib(padapter, pattrib);
+	_rtw_memcpy(pframe, (void*)skb->data, skb->len);
 
-		pattrib->retry_ctrl = _FALSE;
+	pattrib->pktlen = skb->len;
 
-		_rtw_memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
+	pattrib->rate = fixed_rate;
+	pattrib->sgi = sgi;
+	pattrib->bwmode = bwidth; // 0-20 MHz, 1-40 MHz, 2-80 MHz
+	pattrib->ldpc = ldpc;
+	pattrib->stbc = stbc;
+	pattrib->retry_ctrl = (txflags & 0x08)?_FALSE:_TRUE;
 
-		pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
+	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
-		_rtw_memcpy(pframe, (void *)buf, len);
+	pmlmeext->mgnt_seq = GetSequence(pwlanhdr);
+	pattrib->seqnum = pmlmeext->mgnt_seq;
+	pmlmeext->mgnt_seq++;
 
-		pattrib->pktlen = len;
-
-		pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
-
-		if (is_broadcast_mac_addr(pwlanhdr->addr3) || is_broadcast_mac_addr(pwlanhdr->addr1))
-			pattrib->rate = MGN_24M;
-
-		pmlmeext->mgnt_seq = GetSequence(pwlanhdr);
-		pattrib->seqnum = pmlmeext->mgnt_seq;
-		pmlmeext->mgnt_seq++;
-
-		pattrib->last_txcmdsz = pattrib->pktlen;
-
-		dump_mgntframe(padapter, pmgntframe);
-
-	} else {
-		struct xmit_frame		*pmgntframe;
-		struct pkt_attrib	*pattrib;
-		unsigned char	*pframe;
-		struct rtw_ieee80211_hdr *pwlanhdr;
-		struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
-		struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
-		u8 *buf = skb->data;
-		u32 len = skb->len;
-		u8 category, action;
-		int type = -1;
-
-		pmgntframe = alloc_mgtxmitframe(pxmitpriv);
-		if (pmgntframe == NULL)
-			goto fail;
-
-		pattrib = &pmgntframe->attrib;
-		update_mgntframe_attrib(padapter, pattrib);
-		pattrib->retry_ctrl = _FALSE;
-
-		_rtw_memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
-
-		pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
-
-		_rtw_memcpy(pframe, (void *)buf, len);
-
-		pattrib->pktlen = len;
-
-		pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
-
-		pmlmeext->mgnt_seq = GetSequence(pwlanhdr);
-		pattrib->seqnum = pmlmeext->mgnt_seq;
-		pmlmeext->mgnt_seq++;
-
-		pattrib->last_txcmdsz = pattrib->pktlen;
-
-		dump_mgntframe(padapter, pmgntframe);
-
-	}
+	pattrib->last_txcmdsz = pattrib->pktlen;
+	dump_mgntframe(padapter, pmgntframe);
+	DBG_COUNTER(padapter->tx_logs.core_tx);
 
 fail:
 
 	rtw_skb_free(skb);
 
-	return 0;
+	return NETDEV_TX_OK;
 }
 #endif
 /*

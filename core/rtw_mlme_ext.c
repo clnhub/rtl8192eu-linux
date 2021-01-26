@@ -7211,23 +7211,15 @@ void update_monitor_frame_attrib(_adapter *padapter, struct pkt_attrib *pattrib)
 	u8	wireless_mode;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct xmit_priv		*pxmitpriv = &padapter->xmitpriv;
-	struct sta_info		*psta = NULL;
-	struct sta_priv		*pstapriv = &padapter->stapriv;
-	struct sta_info *pbcmc_sta = NULL;
-
-	psta = rtw_get_stainfo(pstapriv, pattrib->ra);
-	pbcmc_sta = rtw_get_bcmc_stainfo(padapter);
 
 	pattrib->hdrlen = 24;
 	pattrib->nr_frags = 1;
 	pattrib->priority = 7;
 
-	if (pbcmc_sta)
-		pattrib->mac_id = pbcmc_sta->cmn.mac_id;
-	else {
-		pattrib->mac_id = 0;
-		RTW_INFO("mgmt use mac_id 0 will affect RA\n");
-	}
+	pattrib->inject = 0xa5;
+
+	pattrib->mac_id = 0;
+
 	pattrib->qsel = QSLT_MGNT;
 
 	pattrib->pktlen = 0;
@@ -7266,7 +7258,7 @@ void update_monitor_frame_attrib(_adapter *padapter, struct pkt_attrib *pattrib)
 
 	pattrib->seqnum = pmlmeext->mgnt_seq;
 
-	pattrib->retry_ctrl = _TRUE;
+	pattrib->retry_ctrl = _FALSE;
 
 	pattrib->mbssid = 0;
 	pattrib->hw_ssn_sel = pxmitpriv->hw_ssn_seq_no;
