@@ -6973,9 +6973,10 @@ void rtw_cfg80211_init_wiphy(_adapter *padapter)
 			rtw_cfg80211_init_ht_capab(padapter, &bands->ht_cap, NL80211_BAND_5GHZ, rf_type);
 	}
 #endif
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 11, 0))
 	/* init regulary domain */
 	rtw_regd_init(padapter);
-
+#endif
 	/* copy mac_addr to wiphy */
 	_rtw_memcpy(wiphy->perm_addr, adapter_mac_addr(padapter), ETH_ALEN);
 
@@ -7425,6 +7426,11 @@ struct wiphy *rtw_wiphy_alloc(_adapter *padapter, struct device *dev)
 #endif
 
 	rtw_cfg80211_preinit_wiphy(padapter, wiphy);
+	
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 11, 0))
+	/* init regulary domain */
+	rtw_regd_init(wiphy);
+#endif	
 
 	RTW_INFO(FUNC_WIPHY_FMT"\n", FUNC_WIPHY_ARG(wiphy));
 

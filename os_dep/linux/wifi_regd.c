@@ -482,12 +482,26 @@ void rtw_reg_notifier(struct wiphy *wiphy, struct regulatory_request *request)
 #endif
 }
 
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 11, 0))
 void rtw_reg_notify_by_driver(_adapter *adapter)
+#else
+void rtw_reg_notify_by_driver(struct wiphy *wiphy)
+#endif
+
 {
+
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 11, 0))
 	if ((adapter->rtw_wdev != NULL) && (adapter->rtw_wdev->wiphy)) {
+#else
+	if (wiphy) {
+#endif
 		struct regulatory_request request;
 		request.initiator = NL80211_REGDOM_SET_BY_DRIVER;
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 11, 0))		
 		rtw_reg_notifier(adapter->rtw_wdev->wiphy, &request);
+#else
+		rtw_reg_notifier(wiphy, &request);
+#endif
 	}
 }
 
@@ -527,9 +541,15 @@ static struct country_code_to_enum_rd *_rtw_regd_find_country(u16 countrycode)
 	return NULL;
 }
 
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 11, 0))
 int rtw_regd_init(_adapter *padapter)
+#else
+void rtw_regd_init(struct wiphy *wiphy)
+#endif
 {
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 11, 0))
 	struct wiphy *wiphy = padapter->rtw_wdev->wiphy;
+#endif
 
 #if 0
 	if (rtw_regd == NULL) {
@@ -548,6 +568,8 @@ int rtw_regd_init(_adapter *padapter)
 
 	_rtw_regd_init_wiphy(NULL, wiphy);
 
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 11, 0))
 	return 0;
+#endif
 }
 #endif /* CONFIG_IOCTL_CFG80211 */
