@@ -1,7 +1,7 @@
 sudo rmmod 8192eu
 sudo rmmod rtl8xxxu
 sudo dkms remove rtl8192eu/1.0 --all
-sudo dkms add .
+sudo dkms add -m rtl8192eu/1.0
 sudo dkms install rtl8192eu/1.0
 sudo depmod -a
 echo "blacklist rtl8xxxu" >> ./blacklist-rtl8xxxu.conf
