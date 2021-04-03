@@ -208,6 +208,7 @@ static struct usb_device_id rtw_usb_id_tbl[] = {
         {USB_DEVICE(0x2357, 0x0109) , .driver_info = RTL8192E}, /* TPLINK -  TL-WN823N */
         {USB_DEVICE(0x2357, 0x0126) , .driver_info = RTL8192E}, /* TPLINK -  TL-WN8200ND */
         {USB_DEVICE(0x2c4e, 0x0100) , .driver_info = RTL8192E}, /* Mercusys -  MW300UM */
+        {USB_DEVICE(0x2c4e, 0x0104) , .driver_info = RTL8192E}, /* Mercusys MW300UH */
 #endif
 
 #ifdef CONFIG_RTL8723B
