@@ -1,6 +1,5 @@
 dname=rtl8192eu
 dver=1.0
-dcomb=$dname-$dver
 dusrdir=/usr/src/$dname-$dver
 sudo rmmod 8192eu
 sudo rmmod rtl8xxxu
