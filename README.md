@@ -30,7 +30,7 @@ Remove available drivers with (skip if `sudo lshw -C network` and `dkms status` 
 ```
 sudo rmmod 8192eu
 sudo rmmod rtl8xxxu
-sudo dkms remove rtl8192eu/1.0 --all
+sudo dkms remove -m rtl8192eu -v 1.0
 ```
 
 Blacklist default driver (rtl8xxxu on Ubuntu):
@@ -43,8 +43,9 @@ sudo mv ./blacklist-rtl8xxxu.conf /etc/modprobe.d/
 Run add and install commands from driver directory:
 
 ```
-sudo dkms add .
-sudo dkms install rtl8192eu/1.0
+sudo cp -ar . /usr/src/rtl8192eu-1.0
+sudo dkms add -m rtl8192eu -v 1.0
+sudo dkms install -m rtl8192eu -v 1.0
 ```
 
 Load driver (or reboot):
