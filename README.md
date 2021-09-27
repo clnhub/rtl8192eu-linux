@@ -1,7 +1,7 @@
 ## rtl8192eu-linux
 Realtek rtl8192eu Linux driver v5.6.3.1
 
-This driver is based on the (latest) manufacturer supported Realtek v5.6.3.1 driver with fixes and improvements to support the latest kernels (up to 5.14).
+This driver is based on the (latest) manufacturer supported Realtek v5.6.3.1 driver with fixes and improvements to support the latest kernels (up to 5.15).
 
 ### Before installing
 
