@@ -3287,6 +3287,20 @@ static int rtw_cfg80211_set_auth_type(struct security_priv *psecuritypriv,
 {
 	RTW_INFO("%s, nl80211_auth_type=%d\n", __func__, sme_auth_type);
 
+	if (NL80211_AUTHTYPE_MAX <= (int)MLME_AUTHTYPE_SAE) {
+		if (MLME_AUTHTYPE_SAE == psecuritypriv->auth_type) {
+			/* This case pre handle in
+			 * rtw_check_connect_sae_compat()
+			 */
+			psecuritypriv->auth_alg = WLAN_AUTH_SAE;
+			return 0;
+		}
+	} else if (sme_auth_type == (int)MLME_AUTHTYPE_SAE) {
+		psecuritypriv->auth_type = MLME_AUTHTYPE_SAE;
+		psecuritypriv->auth_alg = WLAN_AUTH_SAE;
+		return 0;
+	}
+
 	psecuritypriv->auth_type = sme_auth_type;
 
 	switch (sme_auth_type) {
@@ -3315,9 +3329,6 @@ static int rtw_cfg80211_set_auth_type(struct security_priv *psecuritypriv,
 		psecuritypriv->ndisencryptstatus = Ndis802_11Encryption1Enabled;
 
 
-		break;
-	case NL80211_AUTHTYPE_SAE:
-		psecuritypriv->auth_alg = WLAN_AUTH_SAE;
 		break;
 	default:
 		psecuritypriv->dot11AuthAlgrthm = dot11AuthAlgrthm_Open;
@@ -3417,7 +3428,9 @@ static int rtw_cfg80211_set_key_mgt(struct security_priv *psecuritypriv, u32 key
 		psecuritypriv->rsn_akm_suite_type = 4;
 	}
 #endif
-	else {
+	else if (key_mgt == WLAN_AKM_SUITE_SAE) { 
+		psecuritypriv->rsn_akm_suite_type = 8; 
+	} else {
 		RTW_INFO("Invalid key mgt: 0x%x\n", key_mgt);
 		/* return -EINVAL; */
 	}
@@ -3794,7 +3807,7 @@ static bool rtw_check_connect_sae_compat(struct cfg80211_connect_params *sme)
 	u8 AKM_SUITE_SAE[] = { 0x00, 0x0f, 0xac, 8 };
 	int i;
 
-	if (sme->auth_type != 1)
+	if (sme->auth_type != (int)MLME_AUTHTYPE_SHARED_KEY)
 		return false;
 
 	if (rtw_ieee802_11_parse_elems((u8 *)sme->ie, sme->ie_len, &elems, 0)
@@ -3841,8 +3854,10 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 		sme->privacy, sme->key, sme->key_len, sme->key_idx, sme->auth_type);
 
 	if (rtw_check_connect_sae_compat(sme)) {
-		sme->auth_type = NL80211_AUTHTYPE_SAE;
-		RTW_INFO("%s set sme->auth_type=4 for SAE compat\n", __FUNCTION__);
+		sme->auth_type = MLME_AUTHTYPE_SAE;
+		psecuritypriv->auth_type = MLME_AUTHTYPE_SAE;
+		psecuritypriv->auth_alg = WLAN_AUTH_SAE;
+		RTW_INFO("%s set sme->auth_type for SAE compat\n", __FUNCTION__);
 	}
 
 	if (pwdev_priv->block == _TRUE) {
@@ -4228,7 +4243,7 @@ static int cfg80211_rtw_set_pmksa(struct wiphy *wiphy,
 	struct mlme_priv *mlme = &padapter->mlmepriv;
 	struct security_priv	*psecuritypriv = &padapter->securitypriv;
 	u8	strZeroMacAddress[ETH_ALEN] = { 0x00 };
-	bool sae_auth = rtw_sec_chk_auth_type(padapter, NL80211_AUTHTYPE_SAE);
+	bool sae_auth = rtw_sec_chk_auth_type(padapter, MLME_AUTHTYPE_SAE);
 
 	RTW_INFO(FUNC_NDEV_FMT" "MAC_FMT" "KEY_FMT"\n", FUNC_NDEV_ARG(ndev)
 		, MAC_ARG(pmksa->bssid), KEY_ARG(pmksa->pmkid));
@@ -5002,12 +5017,13 @@ static int cfg80211_rtw_start_ap(struct wiphy *wiphy, struct net_device *ndev,
 		goto exit;
 	}
 
-	/*
-	Kernel < v5.1, the auth_type set as NL80211_AUTHTYPE_AUTOMATIC.
-	if the AKM SAE in the RSN IE, we have to update the auth_type for SAE
-	in rtw_check_beacon_data().
-	*/
-	rtw_cfg80211_set_auth_type(&adapter->securitypriv, settings->auth_type);
+	/* Kernel < v5.x, the auth_type set as NL80211_AUTHTYPE_AUTOMATIC. if
+	 * the AKM SAE in the RSN IE, we have to update the auth_type for SAE in
+	 * rtw_check_beacon_data().
+	 *
+	 * we only update auth_type when rtw_check_beacon_data()
+	 */
+	/* rtw_cfg80211_set_auth_type(&adapter->securitypriv, settings->auth_type); */
 
 	rtw_mi_scan_abort(adapter, _TRUE);
 	rtw_mi_buddy_set_scan_deny(adapter, 300);

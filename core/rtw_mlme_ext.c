@@ -2306,7 +2306,7 @@ unsigned int OnAuthClient(_adapter *padapter, union recv_frame *precv_frame)
 
 #ifdef CONFIG_IOCTL_CFG80211
 	if (GET_CFG80211_REPORT_MGMT(adapter_wdev_data(padapter), IEEE80211_STYPE_AUTH) == _TRUE) {
-		if (rtw_sec_chk_auth_type(padapter, NL80211_AUTHTYPE_SAE)) {
+		if (rtw_sec_chk_auth_type(padapter, MLME_AUTHTYPE_SAE)) {
 			if (rtw_cached_pmkid(padapter, get_my_bssid(&pmlmeinfo->network)) != -1) {
 				RTW_INFO("SAE: PMKSA cache entry found\n");
 				goto normal;
@@ -9191,7 +9191,7 @@ void _issue_assocreq(_adapter *padapter, u8 is_reassoc)
 			{
 #ifdef CONFIG_IOCTL_CFG80211
 				if (rtw_sec_chk_auth_alg(padapter, WLAN_AUTH_OPEN) &&
-					rtw_sec_chk_auth_type(padapter, NL80211_AUTHTYPE_SAE)) {
+					rtw_sec_chk_auth_type(padapter, MLME_AUTHTYPE_SAE)) {
 					s32 entry = rtw_cached_pmkid(padapter, pmlmepriv->assoc_bssid);
 
 					rtw_rsn_sync_pmkid(padapter, (u8 *)pIE, (pIE->Length + 2), entry);
@@ -11384,7 +11384,7 @@ void start_clnt_auth(_adapter *padapter)
 		RTW_PRINT("start auth\n");
 
 #ifdef CONFIG_IOCTL_CFG80211
-	if (rtw_sec_chk_auth_type(padapter, NL80211_AUTHTYPE_SAE)) {
+	if (rtw_sec_chk_auth_type(padapter, MLME_AUTHTYPE_SAE)) {
 		if (rtw_cached_pmkid(padapter, get_my_bssid(&pmlmeinfo->network)) != -1) {
 			RTW_INFO("SAE: PMKSA cache entry found\n");
 			padapter->securitypriv.auth_alg = WLAN_AUTH_OPEN;
@@ -13081,7 +13081,7 @@ void link_timer_hdl(void *ctx)
 	} else if (pmlmeinfo->state & WIFI_FW_AUTH_STATE) {
 
 #ifdef CONFIG_IOCTL_CFG80211
-		if (rtw_sec_chk_auth_type(padapter, NL80211_AUTHTYPE_SAE))
+		if (rtw_sec_chk_auth_type(padapter, MLME_AUTHTYPE_SAE))
 			return;
 #endif /* CONFIG_IOCTL_CFG80211 */
 
@@ -16081,19 +16081,17 @@ void rtw_join_done_chk_ch(_adapter *adapter, int join_res)
 
 					rtw_start_bss_hdl_after_chbw_decided(iface);
 
-					if (MLME_IS_GO(iface) || MLME_IS_MESH(iface)) { /* pure AP is not needed*/
-						#if defined(CONFIG_IOCTL_CFG80211) && (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 5, 0))
-						u8 ht_option = 0;
+					#if defined(CONFIG_IOCTL_CFG80211) && (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 5, 0))
+					u8 ht_option = 0;
 
-						#ifdef CONFIG_80211N_HT
-						ht_option = mlme->htpriv.ht_option;
-						#endif
+					#ifdef CONFIG_80211N_HT
+					ht_option = mlme->htpriv.ht_option;
+					#endif
 
-						rtw_cfg80211_ch_switch_notify(iface
-							, mlmeext->cur_channel, mlmeext->cur_bwmode, mlmeext->cur_ch_offset
-							, ht_option);
-						#endif
-					}
+					rtw_cfg80211_ch_switch_notify(iface
+						, mlmeext->cur_channel, mlmeext->cur_bwmode, mlmeext->cur_ch_offset
+						, ht_option);
+					#endif
 				}
 
 				clr_fwstate(mlme, WIFI_OP_CH_SWITCHING);

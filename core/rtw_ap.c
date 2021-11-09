@@ -1773,22 +1773,17 @@ chbw_decision:
 		if (!(ifbmp_ch_changed & BIT(i)) || !pdvobj->padapters[i])
 			continue;
 
-		/* pure AP is not needed*/
-		if (MLME_IS_GO(pdvobj->padapters[i])
-			|| MLME_IS_MESH(pdvobj->padapters[i])
-		) {
-			u8 ht_option = 0;
+		u8 ht_option = 0;
 
-			#ifdef CONFIG_80211N_HT
-			ht_option = pdvobj->padapters[i]->mlmepriv.htpriv.ht_option;
-			#endif
+		#ifdef CONFIG_80211N_HT
+		ht_option = pdvobj->padapters[i]->mlmepriv.htpriv.ht_option;
+		#endif
 
-			rtw_cfg80211_ch_switch_notify(pdvobj->padapters[i]
-				, pdvobj->padapters[i]->mlmeextpriv.cur_channel
-				, pdvobj->padapters[i]->mlmeextpriv.cur_bwmode
-				, pdvobj->padapters[i]->mlmeextpriv.cur_ch_offset
-				, ht_option);
-		}
+		rtw_cfg80211_ch_switch_notify(pdvobj->padapters[i]
+			, pdvobj->padapters[i]->mlmeextpriv.cur_channel
+			, pdvobj->padapters[i]->mlmeextpriv.cur_bwmode
+			, pdvobj->padapters[i]->mlmeextpriv.cur_ch_offset
+			, ht_option);
 	}
 #endif /* defined(CONFIG_IOCTL_CFG80211) && (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 5, 0)) */
 
@@ -2074,14 +2069,20 @@ int rtw_check_beacon_data(_adapter *padapter, u8 *pbuf,  int len)
 			psecuritypriv->wpa2_group_cipher = group_cipher;
 			psecuritypriv->wpa2_pairwise_cipher = pairwise_cipher;
 
-			/*
-			Kernel < v5.1, the auth_type set as NL80211_AUTHTYPE_AUTOMATIC 
-			in cfg80211_rtw_start_ap().
-			if the AKM SAE in the RSN IE, we have to update the auth_type for SAE
-			in rtw_check_beacon_data().
-			*/
-			if (CHECK_BIT(WLAN_AKM_TYPE_SAE, akm))
-				psecuritypriv->auth_type = NL80211_AUTHTYPE_SAE;
+#ifdef CONFIG_IOCTL_CFG80211
+			/**
+			 * Kernel < v5.x, the auth_type set as
+			 * NL80211_AUTHTYPE_AUTOMATIC in
+			 * cfg80211_rtw_start_ap(). if the AKM SAE in the RSN
+			 * IE, we have to update the auth_type for SAE in
+			 * rtw_check_beacon_data()
+			 */
+			if (CHECK_BIT(WLAN_AKM_TYPE_SAE, akm)) {
+				RTW_INFO("%s: Auth type as SAE\n", __func__);
+				psecuritypriv->auth_type = MLME_AUTHTYPE_SAE;
+				psecuritypriv->auth_alg = WLAN_AUTH_SAE;
+			}
+#endif /* CONFIG_IOCTL_CFG80211 */
 #if 0
 			switch (group_cipher) {
 			case WPA_CIPHER_NONE:
@@ -5261,7 +5262,9 @@ u16 rtw_ap_parse_sta_security_ie(_adapter *adapter, struct sta_info *sta, struct
 	else if (sec->mfp_opt >= MFP_OPTIONAL && mfp_opt >= MFP_OPTIONAL)
 		sta->flags |= WLAN_STA_MFP;
 
-	if ((sec->auth_type == NL80211_AUTHTYPE_SAE) &&
+#ifdef CONFIG_IOCTL_CFG80211
+	if (MLME_IS_AP(adapter) &&
+		(sec->auth_type == MLME_AUTHTYPE_SAE) &&
 		(CHECK_BIT(WLAN_AKM_TYPE_SAE, sta->akm_suite_type)) &&
 		(WLAN_AUTH_OPEN == sta->authalg)) {
 		/* WPA3-SAE, PMK caching */
@@ -5272,6 +5275,7 @@ u16 rtw_ap_parse_sta_security_ie(_adapter *adapter, struct sta_info *sta, struct
 			RTW_INFO("SAE: PMKSA cache entry found\n");
 		}
 	}
+#endif /* CONFIG_IOCTL_CFG80211 */
 
 	if (status != _STATS_SUCCESSFUL_)
 		goto exit;

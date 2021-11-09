@@ -175,6 +175,39 @@ enum dot11AuthAlgrthmNum {
 	dot11AuthAlgrthm_MaxNum
 };
 
+/**
+ * enum mlme_auth_type - AuthenticationType
+ *
+ * @MLME_AUTHTYPE_OPEN_SYSTEM: Open System authentication
+ * @MLME_AUTHTYPE_SHARED_KEY: Shared Key authentication (WEP only)
+ * @MLME_AUTHTYPE_FT: Fast BSS Transition (IEEE 802.11r)
+ * @MLME_AUTHTYPE_NETWORK_EAP: Network EAP (some Cisco APs and mainly LEAP)
+ * @MLME_AUTHTYPE_SAE: Simultaneous authentication of equals
+ * @MLME_AUTHTYPE_FILS_SK: Fast Initial Link Setup shared key
+ * @MLME_AUTHTYPE_FILS_SK_PFS: Fast Initial Link Setup shared key with PFS
+ * @MLME_AUTHTYPE_FILS_PK: Fast Initial Link Setup public key
+ * @__MLME_AUTHTYPE_NUM: internal
+ * @MLME_AUTHTYPE_MAX: maximum valid auth algorithm
+ * @MLME_AUTHTYPE_AUTOMATIC: determine automatically (if necessary by trying
+ *      multiple times); this is invalid in netlink -- leave out the attribute
+ *      for this on CONNECT commands.
+ */
+enum mlme_auth_type {
+	MLME_AUTHTYPE_OPEN_SYSTEM,
+	MLME_AUTHTYPE_SHARED_KEY,
+	MLME_AUTHTYPE_FT,
+	MLME_AUTHTYPE_NETWORK_EAP,
+	MLME_AUTHTYPE_SAE,
+	MLME_AUTHTYPE_FILS_SK,
+	MLME_AUTHTYPE_FILS_SK_PFS,
+	MLME_AUTHTYPE_FILS_PK,
+
+	/* keep last */
+	__MLME_AUTHTYPE_NUM,
+	MLME_AUTHTYPE_MAX = __MLME_AUTHTYPE_NUM - 1,
+	MLME_AUTHTYPE_AUTOMATIC
+};
+
 /* Scan type including active and passive scan. */
 typedef enum _RT_SCAN_TYPE {
 	SCAN_PASSIVE,
@@ -698,7 +731,7 @@ struct nb_rpt_hdr {
 	u8 phy_type;	
 };
 
-/*IEEE Std 80211v, Figure 7-95e2¡XBSS Termination Duration subelement field format */
+/*IEEE Std 80211v, Figure 7-95e2\A1XBSS Termination Duration subelement field format */
 struct btm_term_duration {
 	u8 id;
 	u8 len;
@@ -706,7 +739,7 @@ struct btm_term_duration {
 	u16 duration;
 };
 
-/*IEEE Std 80211v, Figure 7-101n8¡XBSS Transition Management Request frame body format */
+/*IEEE Std 80211v, Figure 7-101n8\A1XBSS Transition Management Request frame body format */
 struct btm_req_hdr {
 	u8 req_mode;
 	u16 disassoc_timer;
