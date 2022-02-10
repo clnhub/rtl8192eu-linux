@@ -5,17 +5,28 @@ This driver is based on the (latest) official Realtek v5.2.19.1 driver with fixe
 
 ### Before installing
 
-Make sure you have headers, build, dkms and git packages installed.
+Make sure you have headers, build, dkms and git packages installed. 
 
-Check:
+##### Debian, Ubuntu, Mint:
 
-```
-sudo apt list linux-headers-generic build-essential dkms git
-```
-Install if necessary:
-```
-sudo apt -y install linux-headers-generic build-essential dkms git
-```
+```sudo apt install linux-headers-generic build-essential dkms git```
+
+##### Fedora:
+
+```sudo dnf groupinstall "C Development Tools and Libraries"  & sudo dnf install dkms git```
+
+##### RHEL, CentOS:
+
+```sudo yum groupinstall "Development Tools" && sudo yum install dkms git```
+
+##### Arch Linux, Manjaro:
+
+```sudo pacman -S base-devel dkms git```
+
+##### openSUSE:
+
+```sudo zypper install -t pattern devel_C_C++ && sudo zypper install dkms git```
+
 ### Automated install 
 
 Run from driver directory:
