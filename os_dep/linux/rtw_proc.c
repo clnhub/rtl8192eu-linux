@@ -5428,6 +5428,24 @@ if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 17, 0))
 	return -EROFS;
 }
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0))
+static const struct proc_ops rtw_adapter_proc_seq_fops = {
+	.proc_open = rtw_adapter_proc_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = single_release,
+	.proc_write = rtw_adapter_proc_write,
+};
+
+static const struct proc_ops rtw_adapter_proc_sseq_fops = {
+	.proc_open = rtw_adapter_proc_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = single_release,
+	.proc_write = rtw_adapter_proc_write,
+};
+#else
+
 static const struct file_operations rtw_adapter_proc_seq_fops = {
 	.owner = THIS_MODULE,
 	.open = rtw_adapter_proc_open,
@@ -5445,6 +5463,7 @@ static const struct file_operations rtw_adapter_proc_sseq_fops = {
 	.release = single_release,
 	.write = rtw_adapter_proc_write,
 };
+#endif
 
 int proc_get_odm_adaptivity(struct seq_file *m, void *v)
 {
