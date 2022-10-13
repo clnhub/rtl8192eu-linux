@@ -5414,7 +5414,7 @@ static int rtw_adapter_proc_open(struct inode *inode, struct file *file)
 
 static ssize_t rtw_adapter_proc_write(struct file *file, const char __user *buffer, size_t count, loff_t *pos)
 {
-if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 17, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 17, 0))
 	ssize_t index = (ssize_t)pde_data(file_inode(file));
 #else
 	ssize_t index = (ssize_t)PDE_DATA(file_inode(file));
@@ -5584,7 +5584,7 @@ const int odm_proc_hdls_num = sizeof(odm_proc_hdls) / sizeof(struct rtw_proc_hdl
 
 static int rtw_odm_proc_open(struct inode *inode, struct file *file)
 {
-if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 17, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 17, 0))
 	ssize_t index = (ssize_t)pde_data(inode);
 #else
 	ssize_t index = (ssize_t)PDE_DATA(inode);
