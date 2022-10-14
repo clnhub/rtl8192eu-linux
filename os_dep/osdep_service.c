@@ -2578,7 +2578,11 @@ int rtw_change_ifname(_adapter *padapter, const char *ifname)
 
 	rtw_init_netdev_name(pnetdev, ifname);
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0))
+	eth_hw_addr_set(pnetdev, adapter_mac_addr(padapter));
+#else
 	_rtw_memcpy(pnetdev->dev_addr, adapter_mac_addr(padapter), ETH_ALEN);
+#endif
 
 	if (rtnl_lock_needed)
 		ret = register_netdev(pnetdev);
