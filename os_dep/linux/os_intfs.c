@@ -1250,7 +1250,11 @@ static int rtw_net_set_mac_address(struct net_device *pnetdev, void *addr)
 	}
 
 	_rtw_memcpy(adapter_mac_addr(padapter), sa->sa_data, ETH_ALEN); /* set mac addr to adapter */
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0))
+	eth_hw_addr_set(pnetdev, sa->sa_data); /* set mac addr to net_device */
+#else
 	_rtw_memcpy(pnetdev->dev_addr, sa->sa_data, ETH_ALEN); /* set mac addr to net_device */
+#endif
 
 #if 0
 	if (rtw_is_hw_init_completed(padapter)) {
@@ -1698,7 +1702,11 @@ int rtw_os_ndev_register(_adapter *adapter, const char *name)
 	/* alloc netdev name */
 	rtw_init_netdev_name(ndev, name);
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0))
+	eth_hw_addr_set(ndev, adapter_mac_addr(adapter));
+#else
 	_rtw_memcpy(ndev->dev_addr, adapter_mac_addr(adapter), ETH_ALEN);
+#endif
 
 	/* Tell the network stack we exist */
 
@@ -2673,7 +2681,11 @@ int _netdev_vir_if_open(struct net_device *pnetdev)
 		rtw_mbid_camid_alloc(padapter, adapter_mac_addr(padapter));
 #endif
 		rtw_init_wifidirect_addrs(padapter, adapter_mac_addr(padapter), adapter_mac_addr(padapter));
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0))
+		eth_hw_addr_set(pnetdev, adapter_mac_addr(padapter));
+#else
 		_rtw_memcpy(pnetdev->dev_addr, adapter_mac_addr(padapter), ETH_ALEN);
+#endif
 	}
 #endif /*CONFIG_PLATFORM_INTEL_BYT*/
 
@@ -3422,7 +3434,11 @@ int _netdev_open(struct net_device *pnetdev)
 		rtw_mbid_camid_alloc(padapter, adapter_mac_addr(padapter));
 #endif
 		rtw_init_wifidirect_addrs(padapter, adapter_mac_addr(padapter), adapter_mac_addr(padapter));
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0))
+		eth_hw_addr_set(pnetdev, adapter_mac_addr(padapter));
+#else
 		_rtw_memcpy(pnetdev->dev_addr, adapter_mac_addr(padapter), ETH_ALEN);
+#endif
 #endif /* CONFIG_PLATFORM_INTEL_BYT */
 
 		rtw_clr_surprise_removed(padapter);
