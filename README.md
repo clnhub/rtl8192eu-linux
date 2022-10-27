@@ -5,7 +5,9 @@ This driver is based on the (latest) official and manufacturer supported Realtek
 
 ### Before installing
 
-Make sure you have headers, build, dkms and git packages installed. 
+If you're using a different architecture than x86, please set (MakeFile) ```CONFIG_PLATFORM_I386_PC = n``` and also set your architecture (for example ```CONFIG_PLATFORM_ARM_RPI = y``` for 32-bit ARM, or ```CONFIG_PLATFORM_ARM_AARCH64 = y``` for 64-bit ARM).
+
+Also, make sure you have headers, build, dkms and git packages installed. 
 
 ##### Debian, Ubuntu, Mint:
 
