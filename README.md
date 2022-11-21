@@ -65,3 +65,13 @@ Load driver (or reboot):
 ```
 sudo modprobe 8192eu
 ```
+
+### After installing (secure boot)
+
+If secure boot (deployed mode) is enabled, you must enroll the public key mentioned during the install process once. This may require installing additional packages like mokutil keyutils and openssl. You can temporarily switch to audit mode (bios) and use the driver normally.
+
+To enroll use:
+```
+sudo mokutil --import [public_key]
+```
+After reboot, you can enroll the key.
