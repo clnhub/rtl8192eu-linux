@@ -7,6 +7,7 @@ This driver is based on the official Realtek v5.2.19.1 driver with fixes and imp
 
 Make sure you have headers, build, dkms and git packages installed.
 
+#### Debian-based Linux distributions :
 Check:
 
 ```
@@ -16,6 +17,13 @@ Install if necessary:
 ```
 sudo apt -y install linux-headers-generic build-essential dkms git
 ```
+
+#### Arch-based Linux distributions :
+Install :
+```
+sudo pacman -S linux-headers base-devel dkms git
+```
+
 ### Automated install 
 
 Run from driver directory:
