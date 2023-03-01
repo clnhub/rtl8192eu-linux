@@ -1309,7 +1309,7 @@ u32 _rtw_down_sema(_sema *sema)
 inline void thread_exit(_completion *comp)
 {
 #ifdef PLATFORM_LINUX
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 17, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 17, 0) || (defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE >= 2306))
 	kthread_complete_and_exit(comp, 0);
 #else
 	complete_and_exit(comp, 0);
@@ -2235,7 +2235,7 @@ static int isFileReadable(const char *path, u32 *sz)
 {
 	struct file *fp;
 	int ret = 0;
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 18, 0))
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 18, 0) && (!defined(RHEL_RELEASE_CODE))) || (LINUX_VERSION_CODE < KERNEL_VERSION(5, 18, 0) && (defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE <= 2305))
 	mm_segment_t oldfs;
 #endif	
 	char buf;
@@ -2281,7 +2281,7 @@ static int isFileReadable(const char *path, u32 *sz)
 static int retriveFromFile(const char *path, u8 *buf, u32 sz)
 {
 	int ret = -1;
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 18, 0))	
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 18, 0) && (!defined(RHEL_RELEASE_CODE))) || (LINUX_VERSION_CODE < KERNEL_VERSION(5, 18, 0) && (defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE <= 2305))
 	mm_segment_t oldfs;
 #endif
 	struct file *fp;
@@ -2325,7 +2325,7 @@ static int retriveFromFile(const char *path, u8 *buf, u32 sz)
 static int storeToFile(const char *path, u8 *buf, u32 sz)
 {
 	int ret = 0;
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 18, 0))	
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 18, 0) && (!defined(RHEL_RELEASE_CODE))) || (LINUX_VERSION_CODE < KERNEL_VERSION(5, 18, 0) && (defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE <= 2305))
 	mm_segment_t oldfs;
 #endif	
 	struct file *fp;
