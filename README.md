@@ -31,11 +31,18 @@ Also, make sure you have headers, build, dkms and git packages installed.
 
 ```sudo zypper install -t pattern devel_C_C++ && sudo zypper install dkms git```
 
-### Automated install 
+### Automated (re)install 
 
 Run from driver directory:
 ```
 ./install_wifi.sh
+```
+
+### Automated uninstall/reset
+
+Run from driver directory:
+```
+./uninstall_wifi.sh
 ```
 
 ### Manual install
