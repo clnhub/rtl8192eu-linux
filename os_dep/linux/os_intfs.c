@@ -2104,11 +2104,12 @@ int rtw_os_ndev_register(_adapter *adapter, const char *name)
 	u8 rtnl_lock_needed = rtw_rtnl_lock_needed(dvobj);
 
 #ifdef CONFIG_RTW_NAPI
-	netif_napi_add(ndev, &adapter->napi, rtw_recv_napi_poll
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(6, 1, 0) && (!defined(RHEL_RELEASE_CODE))) || (LINUX_VERSION_CODE < KERNEL_VERSION(6, 1, 0) && (defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE <= 2305)) 
-	, RTL_NAPI_WEIGHT
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(6, 1, 0) && (!defined(RHEL_RELEASE_CODE))) || (LINUX_VERSION_CODE < KERNEL_VERSION(6, 1, 0) && (defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE <= 2305))
+	netif_napi_add(ndev, &adapter->napi, rtw_recv_napi_poll, RTL_NAPI_WEIGHT);
+#else
+        netif_napi_add_weight(ndev, &adapter->napi, rtw_recv_napi_poll, RTL_NAPI_WEIGHT);
 #endif	
-	);
+
 #endif /* CONFIG_RTW_NAPI */
 
 #if defined(CONFIG_IOCTL_CFG80211)
