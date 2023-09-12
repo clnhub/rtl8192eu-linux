@@ -25,7 +25,7 @@ Also, make sure you have headers, build, dkms and git packages installed.
 
 ##### Arch Linux, Manjaro:
 
-```sudo pacman -S base-devel dkms git```
+```sudo pacman -S base-devel dkms bc git```
 
 ##### openSUSE:
 
