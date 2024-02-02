@@ -2536,6 +2536,7 @@ void rtw_free_netdev(struct net_device *netdev)
 RETURN:
 	return;
 }
+int rtw_change_ifname(_adapter *padapter, const char *ifname);
 
 int rtw_change_ifname(_adapter *padapter, const char *ifname)
 {

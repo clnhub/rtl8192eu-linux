@@ -25,7 +25,7 @@
 #include "mp_precomp.h"
 #include "phydm_precomp.h"
 
-s32 phydm_get_cfo_hz(void *dm_void, u32 val, u8 bit_num, u8 frac_num)
+static s32 phydm_get_cfo_hz(void *dm_void, u32 val, u8 bit_num, u8 frac_num)
 {
 	s32 val_s = 0;
 
@@ -93,7 +93,7 @@ void phydm_get_cfo_info_ac(void *dm_void, struct phydm_cfo_rpt *cfo)
 #endif
 
 #if (ODM_IC_11N_SERIES_SUPPORT)
-void phydm_get_cfo_info_n(void *dm_void, struct phydm_cfo_rpt *cfo)
+static void phydm_get_cfo_info_n(void *dm_void, struct phydm_cfo_rpt *cfo)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u32 val[5] = {0};
@@ -147,7 +147,7 @@ void phydm_get_cfo_info_n(void *dm_void, struct phydm_cfo_rpt *cfo)
 	#endif
 }
 
-void phydm_set_atc_status(void *dm_void, boolean atc_status)
+static void phydm_set_atc_status(void *dm_void, boolean atc_status)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_cfo_track_struct *cfo_track = &dm->dm_cfo_track;
@@ -166,7 +166,7 @@ void phydm_set_atc_status(void *dm_void, boolean atc_status)
 }
 
 boolean
-phydm_get_atc_status(void *dm_void)
+static phydm_get_atc_status(void *dm_void)
 {
 	boolean atc_status = false;
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -317,7 +317,7 @@ void phydm_set_crystal_cap(void *dm_void, u8 crystal_cap)
 		PHYDM_DBG(dm, DBG_CFO_TRK, "Set fail\n");
 }
 
-void phydm_cfo_tracking_reset(void *dm_void)
+static void phydm_cfo_tracking_reset(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_cfo_track_struct *cfo_track = &dm->dm_cfo_track;

@@ -176,7 +176,7 @@ u8 * ccmp_decrypt(_adapter *padapter, const u8 *tk, const struct ieee80211_hdr *
 }
 
 
-void ccmp_get_pn(u8 *pn, const u8 *data)
+static void ccmp_get_pn(u8 *pn, const u8 *data)
 {
 	pn[0] = data[7]; /* PN5 */
 	pn[1] = data[6]; /* PN4 */

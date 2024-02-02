@@ -726,7 +726,7 @@ void usb_write_port_cancel(struct intf_hdl *pintfhdl)
 	}
 }
 
-void usb_init_recvbuf(_adapter *padapter, struct recv_buf *precvbuf)
+static void usb_init_recvbuf(_adapter *padapter, struct recv_buf *precvbuf)
 {
 
 	precvbuf->transfer_len = 0;
@@ -742,7 +742,7 @@ void usb_init_recvbuf(_adapter *padapter, struct recv_buf *precvbuf)
 
 }
 
-int recvbuf2recvframe(PADAPTER padapter, void *ptr);
+static int recvbuf2recvframe(PADAPTER padapter, void *ptr);
 
 #ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
 void usb_recv_tasklet(void *priv)
@@ -764,6 +764,7 @@ void usb_recv_tasklet(void *priv)
 		rtw_read_port(padapter, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf);
 	}
 }
+void usb_read_port_complete(struct urb *purb, struct pt_regs *regs);
 
 void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 {
@@ -917,6 +918,8 @@ void usb_recv_tasklet(void *priv)
 		}
 	}
 }
+
+void usb_read_port_complete(struct urb *purb, struct pt_regs *regs);
 
 void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 {

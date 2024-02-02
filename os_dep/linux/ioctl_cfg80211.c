@@ -422,7 +422,7 @@ static void rtw_get_chbw_from_nl80211_channel_type(struct ieee80211_channel *cha
 #endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 29)) */
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 5, 0))
-bool rtw_cfg80211_allow_ch_switch_notify(_adapter *adapter)
+static bool rtw_cfg80211_allow_ch_switch_notify(_adapter *adapter)
 {
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 19, 0))
 	if ((!MLME_IS_AP(adapter))
@@ -502,31 +502,31 @@ exit:
 }
 #endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 5, 0)) */
 
-void rtw_2g_channels_init(struct ieee80211_channel *channels)
+static void rtw_2g_channels_init(struct ieee80211_channel *channels)
 {
 	_rtw_memcpy((void *)channels, (void *)rtw_2ghz_channels, sizeof(rtw_2ghz_channels));
 }
 
-void rtw_5g_channels_init(struct ieee80211_channel *channels)
+static void rtw_5g_channels_init(struct ieee80211_channel *channels)
 {
 	_rtw_memcpy((void *)channels, (void *)rtw_5ghz_a_channels, sizeof(rtw_5ghz_a_channels));
 }
 
-void rtw_2g_rates_init(struct ieee80211_rate *rates)
+static void rtw_2g_rates_init(struct ieee80211_rate *rates)
 {
 	_rtw_memcpy(rates, rtw_g_rates,
 		sizeof(struct ieee80211_rate) * RTW_G_RATES_NUM
 	);
 }
 
-void rtw_5g_rates_init(struct ieee80211_rate *rates)
+static void rtw_5g_rates_init(struct ieee80211_rate *rates)
 {
 	_rtw_memcpy(rates, rtw_a_rates,
 		sizeof(struct ieee80211_rate) * RTW_A_RATES_NUM
 	);
 }
 
-struct ieee80211_supported_band *rtw_spt_band_alloc(BAND_TYPE band)
+static struct ieee80211_supported_band *rtw_spt_band_alloc(BAND_TYPE band)
 {
 	struct ieee80211_supported_band *spt_band = NULL;
 	int n_channels, n_bitrates;
@@ -558,7 +558,7 @@ exit:
 	return spt_band;
 }
 
-void rtw_spt_band_free(struct ieee80211_supported_band *spt_band)
+static void rtw_spt_band_free(struct ieee80211_supported_band *spt_band)
 {
 	u32 size = 0;
 
@@ -646,7 +646,7 @@ static const struct ieee80211_txrx_stypes
 };
 #endif
 
-NDIS_802_11_NETWORK_INFRASTRUCTURE nl80211_iftype_to_rtw_network_type(enum nl80211_iftype type)
+static NDIS_802_11_NETWORK_INFRASTRUCTURE nl80211_iftype_to_rtw_network_type(enum nl80211_iftype type)
 {
 	switch (type) {
 	case NL80211_IFTYPE_ADHOC:
@@ -681,7 +681,7 @@ NDIS_802_11_NETWORK_INFRASTRUCTURE nl80211_iftype_to_rtw_network_type(enum nl802
 	}
 }
 
-u32 nl80211_iftype_to_rtw_mlme_state(enum nl80211_iftype type)
+static u32 nl80211_iftype_to_rtw_mlme_state(enum nl80211_iftype type)
 {
 	switch (type) {
 	case NL80211_IFTYPE_ADHOC:
@@ -2336,7 +2336,7 @@ static int cfg80211_rtw_set_default_key(struct wiphy *wiphy, struct net_device *
 }
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 30))
-int cfg80211_rtw_set_default_mgmt_key(struct wiphy *wiphy,
+static int cfg80211_rtw_set_default_mgmt_key(struct wiphy *wiphy,
 	struct net_device *ndev, 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0) || (defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE >= 2306))
 	int link_id,
@@ -2876,7 +2876,7 @@ void rtw_cfg80211_unlink_bss(_adapter *padapter, struct wlan_network *pnetwork)
 }
 
 /* if target wps scan ongoing, target_ssid is filled */
-int rtw_cfg80211_is_target_wps_scan(struct cfg80211_scan_request *scan_req, struct cfg80211_ssid *target_ssid)
+static int rtw_cfg80211_is_target_wps_scan(struct cfg80211_scan_request *scan_req, struct cfg80211_ssid *target_ssid)
 {
 	int ret = 0;
 
@@ -5513,7 +5513,7 @@ const char *_nl80211_mesh_power_mode_str[] = {
 #define nl80211_mesh_power_mode_str(_p) ((_p <= NL80211_MESH_POWER_MAX) ? _nl80211_mesh_power_mode_str[_p] : _nl80211_mesh_power_mode_str[0])
 #endif
 
-void dump_station_parameters(void *sel, struct wiphy *wiphy, const struct station_parameters *params)
+static void dump_station_parameters(void *sel, struct wiphy *wiphy, const struct station_parameters *params)
 {
 #if DBG_RTW_CFG80211_STA_PARAM
 	if (params->supported_rates_len) {
@@ -5974,7 +5974,7 @@ exit:
 	return ret;
 }
 
-struct sta_info *rtw_sta_info_get_by_idx(struct sta_priv *pstapriv, const int idx, u8 *asoc_list_num)
+static struct sta_info *rtw_sta_info_get_by_idx(struct sta_priv *pstapriv, const int idx, u8 *asoc_list_num)
 {
 	_list	*phead, *plist;
 	struct sta_info *psta = NULL;
@@ -10255,7 +10255,7 @@ static int rtw_hostapd_acs_dump_survey(struct wiphy *wiphy, struct net_device *n
 
 #if (KERNEL_VERSION(4, 17, 0) <= LINUX_VERSION_CODE) \
     || defined(CONFIG_KERNEL_PATCH_EXTERNAL_AUTH)
-int cfg80211_rtw_external_auth(struct wiphy *wiphy, struct net_device *dev,
+static int cfg80211_rtw_external_auth(struct wiphy *wiphy, struct net_device *dev,
 	struct cfg80211_external_auth_params *params)
 {
 	PADAPTER padapter = (_adapter *)rtw_netdev_priv(dev);

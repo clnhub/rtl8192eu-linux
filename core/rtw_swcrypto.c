@@ -27,6 +27,8 @@
  * @frame: the frame including the mac header, pn and payload
  * @plen: payload length, i.e., length of the plain text, without PN and MIC
  */
+int _rtw_ccmp_encrypt(_adapter *padapter, u8 *key, u32 key_len, uint hdrlen, u8 *frame, uint plen);
+
 int _rtw_ccmp_encrypt(_adapter *padapter, u8 *key, u32 key_len, uint hdrlen, u8 *frame, uint plen)
 {
 	u8 *enc = NULL;
@@ -68,6 +70,9 @@ int _rtw_ccmp_encrypt(_adapter *padapter, u8 *key, u32 key_len, uint hdrlen, u8 
  * @frame: the raw frame (@hdrlen + PN + enc_data + MIC)
  * @plen: length of the frame (@hdrlen + PN + enc_data + MIC)
  */
+int _rtw_ccmp_decrypt(_adapter * padapter, u8 *key, u32 key_len, uint hdrlen, u8 *frame,
+	uint plen);
+ 
 int _rtw_ccmp_decrypt(_adapter * padapter, u8 *key, u32 key_len, uint hdrlen, u8 *frame,
 	uint plen)
 {
@@ -131,6 +136,8 @@ int _aes_siv_decrypt(const u8 *key, size_t key_len,
  * @frame: the frame including the mac header, pn and payload
  * @plen: payload length, i.e., length of the plain text, without PN and MIC
  */
+int _rtw_gcmp_encrypt(_adapter * padapter, u8 *key, u32 key_len, uint hdrlen, u8 *frame, uint plen);
+
 int _rtw_gcmp_encrypt(_adapter * padapter, u8 *key, u32 key_len, uint hdrlen, u8 *frame, uint plen)
 {
 	u8 *enc = NULL;
@@ -162,6 +169,9 @@ int _rtw_gcmp_encrypt(_adapter * padapter, u8 *key, u32 key_len, uint hdrlen, u8
  * @frame: the raw frame (@hdrlen + PN + enc_data + MIC)
  * @plen: length of the frame (@hdrlen + PN + enc_data + MIC)
  */
+ 
+int _rtw_gcmp_decrypt(_adapter *padapter, u8 *key, u32 key_len, uint hdrlen, u8 *frame, uint plen);
+ 
 int _rtw_gcmp_decrypt(_adapter *padapter, u8 *key, u32 key_len, uint hdrlen, u8 *frame, uint plen)
 {
 	u8 *plain = NULL;
@@ -193,6 +203,10 @@ int _rtw_gcmp_decrypt(_adapter *padapter, u8 *key, u32 key_len, uint hdrlen, u8 
 
 
 #if  defined(CONFIG_IEEE80211W) | defined(CONFIG_TDLS)
+
+u8 _bip_ccmp_protect(const u8 *key, size_t key_len,
+	const u8 *data, size_t data_len, u8 *mic);
+
 u8 _bip_ccmp_protect(const u8 *key, size_t key_len,
 	const u8 *data, size_t data_len, u8 *mic)
 {
@@ -216,6 +230,9 @@ u8 _bip_ccmp_protect(const u8 *key, size_t key_len,
 	return  res;
 }
 
+u8 _bip_gcmp_protect(u8 *whdr_pos, size_t len,
+	const u8 *key, size_t key_len,
+	const u8 *data, size_t data_len, u8 *mic);
 
 u8 _bip_gcmp_protect(u8 *whdr_pos, size_t len,
 	const u8 *key, size_t key_len,

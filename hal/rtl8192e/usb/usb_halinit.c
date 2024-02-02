@@ -90,7 +90,7 @@ static BOOLEAN HalUsbSetQueuePipeMapping8192EUsb(
 
 }
 
-void rtl8192eu_interface_configure(_adapter *padapter)
+static void rtl8192eu_interface_configure(_adapter *padapter)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(padapter);
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
@@ -250,10 +250,10 @@ static u32 _InitPowerOn_8192EU(_adapter *padapter)
 		rtw_write8(padapter, REG_LDO_SWR_CTRL, 0xC3);
 	} else	{
 		/* SPS */
-		/* 0x7C [6] = 1¡¦b0 (IC default, 0x83) */
+		/* 0x7C [6] = 1Â¡Å b0 (IC default, 0x83) */
 
 
-		/* 0x14[23:20]=b¡¦0101 (raise 1.2V voltage)
+		/* 0x14[23:20]=bÂ¡Å 0101 (raise 1.2V voltage)
 		   u8	tmp1Byte = PlatformEFIORead1Byte(Adapter,0x16);
 		   PlatformEFIOWrite1Byte(Adapter,0x16,tmp1Byte |BIT4|BIT6); */
 		u32 voltage = rtw_read32(padapter , REG_SYS_SWR_CTRL2_8192E);
@@ -479,7 +479,7 @@ _init_UsbAggregationSetting_8192EU(
 }
 
 /*-----------------------------------------------------------------------------
- * Function:	USB_AggModeSwitch()
+ * Function:	static USB_AggModeSwitch()
  *
  * Overview:	When RX traffic is more than 40M, we need to adjust some parameters to increase
  *			RX speed by increasing batch indication size. This will decrease TCP ACK speed, we
@@ -498,7 +498,7 @@ _init_UsbAggregationSetting_8192EU(
  *
  *---------------------------------------------------------------------------*/
 void
-USB_AggModeSwitch(
+static USB_AggModeSwitch(
 		PADAPTER			Adapter
 )
 {
@@ -631,19 +631,19 @@ rt_rf_power_state RfOnOffDetect(PADAPTER pAdapter)
 	return rfpowerstate;
 }	/* HalDetectPwrDownMode */
 
-void _ps_open_RF(_adapter *padapter)
+static void _ps_open_RF(_adapter *padapter)
 {
 	/* here call with bRegSSPwrLvl 1, bRegSSPwrLvl 2 needs to be verified */
 	/* phy_SsPwrSwitch92CU(padapter, rf_on, 1); */
 }
 
-void _ps_close_RF(_adapter *padapter)
+static void _ps_close_RF(_adapter *padapter)
 {
 	/* here call with bRegSSPwrLvl 1, bRegSSPwrLvl 2 needs to be verified */
 	/* phy_SsPwrSwitch92CU(padapter, rf_off, 1); */
 }
 /* page added for usb2 phy reg access. 20120514 */
-void WriteUSB2PHYReg_8192EU(PADAPTER Adapter, u8 Offset, u8 Value)
+static void WriteUSB2PHYReg_8192EU(PADAPTER Adapter, u8 Offset, u8 Value)
 {
 	Offset -= 0x20;
 	rtw_write8(Adapter, 0xFE41, Value);
@@ -651,7 +651,7 @@ void WriteUSB2PHYReg_8192EU(PADAPTER Adapter, u8 Offset, u8 Value)
 	rtw_write8(Adapter, 0xFE42, 0x81);
 }
 
-u8 ReadUSB2PHYReg_8192EU(PADAPTER Adapter, u8 Offset)
+static u8 ReadUSB2PHYReg_8192EU(PADAPTER Adapter, u8 Offset)
 {
 	u8 value;
 	rtw_write8(Adapter, 0xFE40, Offset);
@@ -660,7 +660,7 @@ u8 ReadUSB2PHYReg_8192EU(PADAPTER Adapter, u8 Offset)
 
 	return value;
 }
-u32 rtl8192eu_hal_init(PADAPTER Adapter)
+static u32 rtl8192eu_hal_init(PADAPTER Adapter)
 {
 	u8	value8 = 0;
 	u16  value16;
@@ -1097,7 +1097,7 @@ exit:
 }
 
 void
-hal_poweroff_8192eu(
+static hal_poweroff_8192eu(
 		PADAPTER			Adapter
 )
 {
@@ -1159,7 +1159,7 @@ static void rtl8192e_hw_power_down(_adapter *padapter)
 	rtw_write16(padapter, REG_APS_FSMCO, 0x8812);
 }
 
-u32 rtl8192eu_hal_deinit(PADAPTER Adapter)
+static u32 rtl8192eu_hal_deinit(PADAPTER Adapter)
 {
 	struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(Adapter);
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1201,7 +1201,7 @@ u32 rtl8192eu_hal_deinit(PADAPTER Adapter)
 }
 
 
-unsigned int rtl8192eu_inirp_init(PADAPTER Adapter)
+static unsigned int rtl8192eu_inirp_init(PADAPTER Adapter)
 {
 	u8 i;
 	struct recv_buf *precvbuf;
@@ -1255,7 +1255,7 @@ exit:
 
 }
 
-unsigned int rtl8192eu_inirp_deinit(PADAPTER Adapter)
+static unsigned int rtl8192eu_inirp_deinit(PADAPTER Adapter)
 {
 
 	rtw_read_port_cancel(Adapter);
@@ -1269,7 +1269,7 @@ unsigned int rtl8192eu_inirp_deinit(PADAPTER Adapter)
  *	EEPROM/EFUSE Content Parsing
  *
  * ------------------------------------------------------------------- */
-void
+static void
 hal_ReadIDs_8192EU(
 		PADAPTER	Adapter,
 		u8 			*PROMContent,
@@ -1312,7 +1312,7 @@ hal_ReadIDs_8192EU(
 }
 
 void
-hal_CustomizedBehavior_8192EU(
+static hal_CustomizedBehavior_8192EU(
 		PADAPTER	Adapter
 )
 {
@@ -1417,7 +1417,7 @@ hal_CustomizeByCustomerID_8192EU(
 	}
 	RTW_INFO("MGNT Customer ID: 0x%2x\n", pHalData->CustomerID);
 
-	hal_CustomizedBehavior_8192EU(padapter);
+	static hal_CustomizedBehavior_8192EU(padapter);
 #endif
 }
 
@@ -1448,7 +1448,7 @@ ReadLEDSetting_8192EU(
 #endif
 }
 
-void
+static void
 InitAdapterVariablesByPROM_8192EU(
 		PADAPTER	Adapter
 )
@@ -1508,7 +1508,7 @@ static void Hal_ReadPROMContent_8192EU(
 	InitAdapterVariablesByPROM_8192EU(Adapter);
 }
 
-u8
+static u8
 ReadAdapterInfo8192EU(
 		PADAPTER			Adapter
 )
@@ -1522,7 +1522,7 @@ ReadAdapterInfo8192EU(
 	return _SUCCESS;
 }
 
-void UpdateInterruptMask8192EU(PADAPTER padapter, u8 bHIMR0 , u32 AddMSR, u32 RemoveMSR)
+static void UpdateInterruptMask8192EU(PADAPTER padapter, u8 bHIMR0 , u32 AddMSR, u32 RemoveMSR)
 {
 	HAL_DATA_TYPE *pHalData;
 
@@ -1547,7 +1547,7 @@ void UpdateInterruptMask8192EU(PADAPTER padapter, u8 bHIMR0 , u32 AddMSR, u32 Re
 
 }
 
-u8 SetHwReg8192EU(PADAPTER Adapter, u8 variable, u8 *val)
+static u8 SetHwReg8192EU(PADAPTER Adapter, u8 variable, u8 *val)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(Adapter);
@@ -1661,7 +1661,7 @@ u8 SetHwReg8192EU(PADAPTER Adapter, u8 variable, u8 *val)
 }
 
 
-void GetHwReg8192EU(PADAPTER Adapter, u8 variable, u8 *val)
+static void GetHwReg8192EU(PADAPTER Adapter, u8 variable, u8 *val)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 
@@ -1673,7 +1673,7 @@ void GetHwReg8192EU(PADAPTER Adapter, u8 variable, u8 *val)
 
 }
 u8
-GetHalDefVar8192EUsb(
+static GetHalDefVar8192EUsb(
 		PADAPTER				Adapter,
 		HAL_DEF_VARIABLE		eVariable,
 		void						*pValue
@@ -1698,7 +1698,7 @@ GetHalDefVar8192EUsb(
  *		Change default setting of specified variable.
  *   */
 u8
-SetHalDefVar8192EUsb(
+static SetHalDefVar8192EUsb(
 		PADAPTER				Adapter,
 		HAL_DEF_VARIABLE		eVariable,
 		void						*pValue

@@ -121,6 +121,7 @@ void interrupt_handler_8192eu(_adapter *padapter, u16 pkt_len, u8 *pbuf)
 }
 #endif
 
+int recvbuf2recvframe(PADAPTER padapter, void *ptr);
 
 int recvbuf2recvframe(PADAPTER padapter, void *ptr)
 {

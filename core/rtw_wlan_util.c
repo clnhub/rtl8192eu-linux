@@ -934,7 +934,7 @@ inline bool rtw_sec_camid_is_drv_forbid(struct cam_ctl_t *cam_ctl, u8 id)
 	return 1;
 }
 
-bool _rtw_sec_camid_is_used(struct cam_ctl_t *cam_ctl, u8 id)
+static bool _rtw_sec_camid_is_used(struct cam_ctl_t *cam_ctl, u8 id)
 {
 	bool ret = _FALSE;
 
@@ -1022,7 +1022,7 @@ inline bool rtw_camid_is_gk(_adapter *adapter, u8 cam_id)
 	return ret;
 }
 
-bool cam_cache_chk(_adapter *adapter, u8 id, u8 *addr, s16 kid, s8 gk)
+static bool cam_cache_chk(_adapter *adapter, u8 id, u8 *addr, s16 kid, s8 gk)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	bool ret = _FALSE;
@@ -1040,7 +1040,7 @@ exit:
 	return ret;
 }
 
-s16 _rtw_camid_search(_adapter *adapter, u8 *addr, s16 kid, s8 gk)
+static s16 _rtw_camid_search(_adapter *adapter, u8 *addr, s16 kid, s8 gk)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
@@ -1080,7 +1080,7 @@ s16 rtw_camid_search(_adapter *adapter, u8 *addr, s16 kid, s8 gk)
 	return cam_id;
 }
 
-s16 rtw_get_camid(_adapter *adapter, u8 *addr, s16 kid, u8 gk, bool ext_sec)
+static s16 rtw_get_camid(_adapter *adapter, u8 *addr, s16 kid, u8 gk, bool ext_sec)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
@@ -1210,7 +1210,7 @@ bitmap_handle:
 	return cam_id;
 }
 
-void rtw_camid_set(_adapter *adapter, u8 cam_id)
+static void rtw_camid_set(_adapter *adapter, u8 cam_id)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
@@ -1291,7 +1291,7 @@ inline void rtw_sec_cam_swap(_adapter *adapter, u8 cam_id_a, u8 cam_id_b)
 	}
 }
 
-s16 rtw_get_empty_cam_entry(_adapter *adapter, u8 start_camid)
+static s16 rtw_get_empty_cam_entry(_adapter *adapter, u8 start_camid)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
@@ -2178,7 +2178,7 @@ void	update_ldpc_stbc_cap(struct sta_info *psta)
 #endif /* CONFIG_80211N_HT */
 }
 
-int check_ielen(u8 *start, uint len)
+static int check_ielen(u8 *start, uint len)
 {
 	int left = len;
 	u8 *pos = start;
@@ -2402,7 +2402,7 @@ void rtw_debug_rx_bcn(_adapter *adapter, u8 *pframe, u32 packet_len)
  *	WLAN_EID_CHANNEL_SWITCH
  *	WLAN_EID_PWR_CONSTRAINT
  */
-int _rtw_get_bcn_keys(u8 *cap_info, u32 buf_len, u8 def_ch, ADAPTER *adapter
+static int _rtw_get_bcn_keys(u8 *cap_info, u32 buf_len, u8 def_ch, ADAPTER *adapter
 	, struct beacon_keys *recv_beacon)
 {
 	int left;

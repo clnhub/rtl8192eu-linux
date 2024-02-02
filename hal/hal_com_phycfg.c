@@ -693,7 +693,7 @@ static inline void hal_init_pg_txpwr_info_5g(_adapter *adapter, TxPowerInfo5G *p
 #define LOAD_PG_TXPWR_WARN_COND(_txpwr_src) (_txpwr_src > PG_TXPWR_SRC_PG_DATA)
 #endif
 
-u16 hal_load_pg_txpwr_info_path_2g(
+static u16 hal_load_pg_txpwr_info_path_2g(
 	_adapter *adapter,
 	TxPowerInfo24G	*pwr_info,
 	u32 path,
@@ -822,7 +822,7 @@ exit:
 	return offset;
 }
 
-u16 hal_load_pg_txpwr_info_path_5g(
+static u16 hal_load_pg_txpwr_info_path_5g(
 	_adapter *adapter,
 	TxPowerInfo5G	*pwr_info,
 	u32 path,
@@ -982,7 +982,7 @@ exit:
 	return offset;
 }
 
-void hal_load_pg_txpwr_info(
+static void hal_load_pg_txpwr_info(
 	_adapter *adapter,
 	TxPowerInfo24G *pwr_info_2g,
 	TxPowerInfo5G *pwr_info_5g,
@@ -1416,7 +1416,7 @@ void dump_hal_txpwr_info_5g(void *sel, _adapter *adapter, u8 rfpath_num, u8 max_
 *
 * Return dBm or -1 for undefined
 */
-s8 rtw_regsty_get_target_tx_power(
+static s8 rtw_regsty_get_target_tx_power(
 		PADAPTER		Adapter,
 		u8				Band,
 		u8				RfPath,
@@ -1460,7 +1460,7 @@ s8 rtw_regsty_get_target_tx_power(
 	return value;
 }
 
-bool rtw_regsty_chk_target_tx_power_valid(_adapter *adapter)
+static bool rtw_regsty_chk_target_tx_power_valid(_adapter *adapter)
 {
 	struct hal_spec_t *hal_spec = GET_HAL_SPEC(adapter);
 	int path, tx_num, band, rs;
@@ -1653,7 +1653,7 @@ static void phy_txpwr_by_rate_chk_for_path_dup(_adapter *adapter)
 	}
 }
 
-void phy_store_target_tx_power(PADAPTER	pAdapter)
+static void phy_store_target_tx_power(PADAPTER	pAdapter)
 {
 	struct hal_spec_t *hal_spec = GET_HAL_SPEC(pAdapter);
 	struct registry_priv *regsty = adapter_to_regsty(pAdapter);
@@ -2085,7 +2085,7 @@ PHY_GetRateValuesOfTxPowerByRate(
 	};
 }
 
-void
+static void
 PHY_StoreTxPowerByRateNew(
 		PADAPTER	pAdapter,
 		u32			Band,
@@ -2219,7 +2219,7 @@ exit:
 	return;
 }
 
-bool phy_get_ch_idx(u8 ch, u8 *ch_idx)
+static bool phy_get_ch_idx(u8 ch, u8 *ch_idx)
 {
 	u8  i = 0;
 	BOOLEAN bIn24G = _TRUE;
@@ -3561,7 +3561,7 @@ static void phy_txpwr_lmt_post_hdl(_adapter *adapter)
 	_exit_critical_mutex(&rfctl->txpwr_lmt_mutex, &irqL);
 }
 
-BOOLEAN
+static BOOLEAN
 GetS1ByteIntegerFromStringInDecimal(
 			char	*str,
 			s8		*val
@@ -3930,7 +3930,7 @@ void dump_tx_power_index_inline(void *sel, _adapter *adapter, u8 rfpath, enum ch
 }
 
 #ifdef CONFIG_PROC_DEBUG
-void dump_tx_power_idx_value(void *sel, _adapter *adapter, u8 rfpath, enum MGN_RATE rate, u8 pwr_idx, struct txpwr_idx_comp *tic)
+static void dump_tx_power_idx_value(void *sel, _adapter *adapter, u8 rfpath, enum MGN_RATE rate, u8 pwr_idx, struct txpwr_idx_comp *tic)
 {
 	struct hal_spec_t *hal_spec = GET_HAL_SPEC(adapter);
 	char tmp_str[8];
@@ -4034,7 +4034,7 @@ void dump_tx_power_idx(void *sel, _adapter *adapter, enum channel_width bw, u8 c
 			dump_tx_power_idx_by_path_rs(sel, adapter, rfpath, rs, bw, cch, opch);
 }
 
-void dump_txpwr_total_dbm_value(void *sel, _adapter *adapter, enum MGN_RATE rate, u8 ntx_idx
+static void dump_txpwr_total_dbm_value(void *sel, _adapter *adapter, enum MGN_RATE rate, u8 ntx_idx
 	, s16 target, s16 byr, s16 btc, s16 extra, s16 lmt, s16 ulmt, s16 tpc)
 {
 	char target_str[8];
@@ -4058,7 +4058,7 @@ void dump_txpwr_total_dbm_value(void *sel, _adapter *adapter, enum MGN_RATE rate
 		, target_str, byr_str, btc_str, extra_str, lmt_str, ulmt_str, tpc_str);
 }
 
-void dump_txpwr_total_dbm_value_utgt(void *sel, _adapter *adapter, enum MGN_RATE rate, u8 ntx_idx
+static void dump_txpwr_total_dbm_value_utgt(void *sel, _adapter *adapter, enum MGN_RATE rate, u8 ntx_idx
 	, s16 target, s16 utgt, s16 lmt, s16 ulmt, s16 tpc)
 {
 	char target_str[8];
@@ -4655,7 +4655,7 @@ phy_ConfigBBWithParaFile(
 	return rtStatus;
 }
 
-void
+static void
 phy_DecryptBBPgParaFile(
 	PADAPTER		Adapter,
 	char			*buffer
@@ -4697,7 +4697,7 @@ phy_DecryptBBPgParaFile(
 #define DBG_TXPWR_BY_RATE_FILE_PARSE 0
 #endif
 
-int
+static int
 phy_ParseBBPgParaFile(
 	PADAPTER		Adapter,
 	char			*buffer
@@ -5129,7 +5129,7 @@ PHY_ConfigRFWithParaFile(
 	return rtStatus;
 }
 
-void
+static void
 initDeltaSwingIndexTables(
 	PADAPTER	Adapter,
 	char		*Band,
@@ -5851,7 +5851,7 @@ bool phy_is_txpwr_user_target_specified(_adapter *adapter)
 * Return value in unit of TX Gain Index
 * hal_spec.txgi_max means unspecified
 */
-s8 phy_get_txpwr_user_target(_adapter *adapter, struct hal_spec_t *hal_spec, u8 ntx_idx)
+static s8 phy_get_txpwr_user_target(_adapter *adapter, struct hal_spec_t *hal_spec, u8 ntx_idx)
 {
 	s16 total_mbm = UNSPECIFIED_MBM;
 	s8 target;
@@ -5871,7 +5871,7 @@ s8 phy_get_txpwr_user_target(_adapter *adapter, struct hal_spec_t *hal_spec, u8 
 * Return value in unit of TX Gain Index
 * hal_spec.txgi_max means unspecified
 */
-s8 phy_get_txpwr_user_lmt(_adapter *adapter, struct hal_spec_t *hal_spec, u8 ntx_idx)
+static s8 phy_get_txpwr_user_lmt(_adapter *adapter, struct hal_spec_t *hal_spec, u8 ntx_idx)
 {
 	s16 total_mbm = UNSPECIFIED_MBM;
 	s8 lmt;
@@ -5891,7 +5891,7 @@ s8 phy_get_txpwr_user_lmt(_adapter *adapter, struct hal_spec_t *hal_spec, u8 ntx
 * Return value in unit of TX Gain Index
 * 0 means unspecified
 */
-s8 phy_get_txpwr_tpc(_adapter *adapter, struct hal_spec_t *hal_spec)
+static s8 phy_get_txpwr_tpc(_adapter *adapter, struct hal_spec_t *hal_spec)
 {
 	struct rf_ctl_t *rfctl = adapter_to_rfctl(adapter);
 	u16 cnst = 0;

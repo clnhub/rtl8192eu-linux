@@ -32,7 +32,7 @@
 /*@<YuChen, 150720> Add for KFree Feature Requested by RF David.*/
 /*@This is a phydm API*/
 
-void phydm_set_kfree_to_rf_8814a(void *dm_void, u8 e_rf_path, u8 data)
+static void phydm_set_kfree_to_rf_8814a(void *dm_void, u8 e_rf_path, u8 data)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct dm_rf_calibration_struct *cali_info = &dm->rf_calibrate_info;
@@ -124,7 +124,7 @@ void phydm_set_kfree_to_rf_8814a(void *dm_void, u8 e_rf_path, u8 data)
 	}
 }
 
-void phydm_get_thermal_trim_offset_8821c(void *dm_void)
+static void phydm_get_thermal_trim_offset_8821c(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -151,7 +151,7 @@ void phydm_get_thermal_trim_offset_8821c(void *dm_void)
 		       power_trim_info->thermal);
 }
 
-void phydm_get_power_trim_offset_8821c(void *dm_void)
+static void phydm_get_power_trim_offset_8821c(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -188,7 +188,7 @@ void phydm_get_power_trim_offset_8821c(void *dm_void)
 	}
 }
 
-void phydm_set_kfree_to_rf_8821c(void *dm_void, u8 e_rf_path, boolean wlg_btg,
+static void phydm_set_kfree_to_rf_8821c(void *dm_void, u8 e_rf_path, boolean wlg_btg,
 				 u8 data)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -223,7 +223,7 @@ void phydm_set_kfree_to_rf_8821c(void *dm_void, u8 e_rf_path, boolean wlg_btg,
 	       odm_get_rf_reg(dm, e_rf_path, RF_0x65, s_gain_bmask));
 }
 
-void phydm_clear_kfree_to_rf_8821c(void *dm_void, u8 e_rf_path, u8 data)
+static void phydm_clear_kfree_to_rf_8821c(void *dm_void, u8 e_rf_path, u8 data)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u32 gain_bmask = (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14));
@@ -252,7 +252,7 @@ void phydm_clear_kfree_to_rf_8821c(void *dm_void, u8 e_rf_path, u8 data)
 	       odm_get_rf_reg(dm, e_rf_path, RF_0x65, s_gain_bmask));
 }
 
-void phydm_get_thermal_trim_offset_8822b(void *dm_void)
+static void phydm_get_thermal_trim_offset_8822b(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -279,7 +279,7 @@ void phydm_get_thermal_trim_offset_8822b(void *dm_void)
 		       power_trim_info->thermal);
 }
 
-void phydm_get_power_trim_offset_8822b(void *dm_void)
+static void phydm_get_power_trim_offset_8822b(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -346,7 +346,7 @@ void phydm_get_power_trim_offset_8822b(void *dm_void)
 	}
 }
 
-void phydm_set_pa_bias_to_rf_8822b(void *dm_void, u8 e_rf_path, s8 tx_pa_bias)
+static void phydm_set_pa_bias_to_rf_8822b(void *dm_void, u8 e_rf_path, s8 tx_pa_bias)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u32 rf_reg_51 = 0, rf_reg_52 = 0, rf_reg_3f = 0;
@@ -405,7 +405,7 @@ void phydm_set_pa_bias_to_rf_8822b(void *dm_void, u8 e_rf_path, s8 tx_pa_bias)
 			      e_rf_path);
 }
 
-void phydm_get_pa_bias_offset_8822b(void *dm_void)
+static void phydm_get_pa_bias_offset_8822b(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -450,7 +450,7 @@ void phydm_get_pa_bias_offset_8822b(void *dm_void)
 	}
 }
 
-void phydm_set_kfree_to_rf_8822b(void *dm_void, u8 e_rf_path, u8 data)
+static void phydm_set_kfree_to_rf_8822b(void *dm_void, u8 e_rf_path, u8 data)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u32 gain_bmask = (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14));
@@ -470,7 +470,7 @@ void phydm_set_kfree_to_rf_8822b(void *dm_void, u8 e_rf_path, u8 data)
 			      BIT(15) | BIT(14))), e_rf_path);
 }
 
-void phydm_clear_kfree_to_rf_8822b(void *dm_void, u8 e_rf_path, u8 data)
+static void phydm_clear_kfree_to_rf_8822b(void *dm_void, u8 e_rf_path, u8 data)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u32 gain_bmask = (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14));
@@ -497,7 +497,7 @@ void phydm_clear_kfree_to_rf_8822b(void *dm_void, u8 e_rf_path, u8 data)
 			      BIT(15) | BIT(14))), e_rf_path);
 }
 
-void phydm_get_thermal_trim_offset_8710b(void *dm_void)
+static void phydm_get_thermal_trim_offset_8710b(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -524,7 +524,7 @@ void phydm_get_thermal_trim_offset_8710b(void *dm_void)
 		       power_trim_info->thermal);
 }
 
-void phydm_get_power_trim_offset_8710b(void *dm_void)
+static void phydm_get_power_trim_offset_8710b(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -551,7 +551,7 @@ void phydm_get_power_trim_offset_8710b(void *dm_void)
 		       power_trim_info->bb_gain[0][0]);
 }
 
-void phydm_set_kfree_to_rf_8710b(void *dm_void, u8 e_rf_path, u8 data)
+static void phydm_set_kfree_to_rf_8710b(void *dm_void, u8 e_rf_path, u8 data)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u32 gain_bmask = (BIT(18) | BIT(17) | BIT(16) | BIT(15));
@@ -565,7 +565,7 @@ void phydm_set_kfree_to_rf_8710b(void *dm_void, u8 e_rf_path, u8 data)
 			      BIT(15) | BIT(14))), e_rf_path);
 }
 
-void phydm_clear_kfree_to_rf_8710b(void *dm_void, u8 e_rf_path, u8 data)
+static void phydm_clear_kfree_to_rf_8710b(void *dm_void, u8 e_rf_path, u8 data)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u32 gain_bmask = (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14));
@@ -581,7 +581,7 @@ void phydm_clear_kfree_to_rf_8710b(void *dm_void, u8 e_rf_path, u8 data)
 			      BIT(15) | BIT(14))), e_rf_path);
 }
 
-void phydm_get_thermal_trim_offset_8192f(void *dm_void)
+static void phydm_get_thermal_trim_offset_8192f(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -608,7 +608,7 @@ void phydm_get_thermal_trim_offset_8192f(void *dm_void)
 		       power_trim_info->thermal);
 }
 
-void phydm_get_power_trim_offset_8192f(void *dm_void)
+static void phydm_get_power_trim_offset_8192f(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -677,7 +677,7 @@ void phydm_get_power_trim_offset_8192f(void *dm_void)
 	}
 }
 
-void phydm_set_kfree_to_rf_8192f(void *dm_void, u8 e_rf_path, u8 channel_idx,
+static void phydm_set_kfree_to_rf_8192f(void *dm_void, u8 e_rf_path, u8 channel_idx,
 				 u8 data)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -765,7 +765,7 @@ void phydm_clear_kfree_to_rf_8192f(void *dm_void, u8 e_rf_path, u8 data)
 */
 #endif
 
-void phydm_get_thermal_trim_offset_8198f(void *dm_void)
+static void phydm_get_thermal_trim_offset_8198f(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -795,7 +795,7 @@ void phydm_get_thermal_trim_offset_8198f(void *dm_void)
 		       power_trim_info->thermal);
 }
 
-void phydm_get_power_trim_offset_8198f(void *dm_void)
+static void phydm_get_power_trim_offset_8198f(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -864,7 +864,7 @@ void phydm_get_power_trim_offset_8198f(void *dm_void)
 	}
 }
 
-void phydm_get_pa_bias_offset_8198f(void *dm_void)
+static void phydm_get_pa_bias_offset_8198f(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -918,7 +918,7 @@ void phydm_get_pa_bias_offset_8198f(void *dm_void)
 	}
 }
 
-void phydm_get_set_lna_offset_8198f(void *dm_void)
+static void phydm_get_set_lna_offset_8198f(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -986,7 +986,7 @@ void phydm_get_set_lna_offset_8198f(void *dm_void)
 }
 
 
-void phydm_set_kfree_to_rf_8198f(void *dm_void, u8 e_rf_path, u8 data)
+static void phydm_set_kfree_to_rf_8198f(void *dm_void, u8 e_rf_path, u8 data)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1028,7 +1028,7 @@ void phydm_set_kfree_to_rf_8198f(void *dm_void, u8 e_rf_path, u8 data)
 
 }
 
-void phydm_clear_kfree_to_rf_8198f(void *dm_void, u8 e_rf_path, u8 data)
+static void phydm_clear_kfree_to_rf_8198f(void *dm_void, u8 e_rf_path, u8 data)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 #if 0
@@ -1072,7 +1072,7 @@ void phydm_clear_kfree_to_rf_8198f(void *dm_void, u8 e_rf_path, u8 data)
 
 }
 
-void phydm_get_set_thermal_trim_offset_8822c(void *dm_void)
+static void phydm_get_set_thermal_trim_offset_8822c(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1112,7 +1112,7 @@ void phydm_get_set_thermal_trim_offset_8822c(void *dm_void)
 			thermal[RF_PATH_B]);	
 }
 
-void phydm_set_power_trim_offset_8822c(void *dm_void)
+static void phydm_set_power_trim_offset_8822c(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1172,7 +1172,7 @@ void phydm_set_power_trim_offset_8822c(void *dm_void)
 	}
 }
 
-void phydm_get_set_power_trim_offset_8822c(void *dm_void)
+static void phydm_get_set_power_trim_offset_8822c(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1273,7 +1273,7 @@ void phydm_get_set_power_trim_offset_8822c(void *dm_void)
 	}
 }
 
-void phydm_get_tssi_trim_offset_8822c(void *dm_void)
+static void phydm_get_tssi_trim_offset_8822c(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1341,7 +1341,7 @@ void phydm_get_tssi_trim_offset_8822c(void *dm_void)
 	}
 }
 
-s8 phydm_get_tssi_trim_de_8822c(void *dm_void, u8 path)
+static s8 phydm_get_tssi_trim_de_8822c(void *dm_void, u8 path)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1377,7 +1377,7 @@ s8 phydm_get_tssi_trim_de_8822c(void *dm_void, u8 path)
 
 
 
-void phydm_get_set_pa_bias_offset_8822c(void *dm_void)
+static void phydm_get_set_pa_bias_offset_8822c(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1432,7 +1432,7 @@ void phydm_get_set_pa_bias_offset_8822c(void *dm_void)
 
 }
 
-void phydm_get_set_thermal_trim_offset_8812f(void *dm_void)
+static void phydm_get_set_thermal_trim_offset_8812f(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1472,7 +1472,7 @@ void phydm_get_set_thermal_trim_offset_8812f(void *dm_void)
 			thermal[RF_PATH_B]);	
 }
 
-void phydm_set_power_trim_offset_8812f(void *dm_void)
+static void phydm_set_power_trim_offset_8812f(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1534,7 +1534,7 @@ void phydm_set_power_trim_offset_8812f(void *dm_void)
 	}
 }
 
-void phydm_get_set_power_trim_offset_8812f(void *dm_void)
+static void phydm_get_set_power_trim_offset_8812f(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1637,7 +1637,7 @@ void phydm_get_set_power_trim_offset_8812f(void *dm_void)
 	}
 }
 
-void phydm_get_tssi_trim_offset_8812f(void *dm_void)
+static void phydm_get_tssi_trim_offset_8812f(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1709,7 +1709,7 @@ void phydm_get_tssi_trim_offset_8812f(void *dm_void)
 	}
 }
 
-s8 phydm_get_tssi_trim_de_8812f(void *dm_void, u8 path)
+static s8 phydm_get_tssi_trim_de_8812f(void *dm_void, u8 path)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1743,7 +1743,7 @@ s8 phydm_get_tssi_trim_de_8812f(void *dm_void, u8 path)
 	return power_trim_info->tssi_trim[group][path];
 }
 
-void phydm_get_set_pa_bias_offset_8812f(void *dm_void)
+static void phydm_get_set_pa_bias_offset_8812f(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1800,7 +1800,7 @@ void phydm_get_set_pa_bias_offset_8812f(void *dm_void)
 
 }
 
-void phydm_get_thermal_trim_offset_8195b(void *dm_void)
+static void phydm_get_thermal_trim_offset_8195b(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1827,7 +1827,7 @@ void phydm_get_thermal_trim_offset_8195b(void *dm_void)
 		       power_trim_info->thermal);
 }
 
-void phydm_set_power_trim_rf_8195b(void *dm_void)
+static void phydm_set_power_trim_rf_8195b(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1876,7 +1876,7 @@ void phydm_set_power_trim_rf_8195b(void *dm_void)
 
 }
 
-void phydm_get_set_power_trim_offset_8195b(void *dm_void)
+static void phydm_get_set_power_trim_offset_8195b(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1939,7 +1939,7 @@ void phydm_get_set_power_trim_offset_8195b(void *dm_void)
 	}
 }
 
-void phydm_get_set_pa_bias_offset_8195b(void *dm_void)
+static void phydm_get_set_pa_bias_offset_8195b(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -1983,7 +1983,7 @@ void phydm_get_set_pa_bias_offset_8195b(void *dm_void)
 	}
 }
 
-void phydm_get_thermal_trim_offset_8721d(void *dm_void)
+static void phydm_get_thermal_trim_offset_8721d(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2010,7 +2010,7 @@ void phydm_get_thermal_trim_offset_8721d(void *dm_void)
 		       power_trim_info->thermal);
 }
 
-void phydm_set_power_trim_rf_8721d(void *dm_void)
+static void phydm_set_power_trim_rf_8721d(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2068,7 +2068,7 @@ void phydm_set_power_trim_rf_8721d(void *dm_void)
 	odm_set_rf_reg(dm, RF_PATH_A, RF_0xee, BIT(19), 0);
 }
 
-void phydm_get_set_power_trim_offset_8721d(void *dm_void)
+static void phydm_get_set_power_trim_offset_8721d(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2144,7 +2144,7 @@ void phydm_get_set_power_trim_offset_8721d(void *dm_void)
 	}
 }
 
-void phydm_get_set_pa_bias_offset_8721d(void *dm_void)
+static void phydm_get_set_pa_bias_offset_8721d(void *dm_void)
 {
 #if 0
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -2182,7 +2182,7 @@ void phydm_get_set_pa_bias_offset_8721d(void *dm_void)
 #endif
 }
 
-void phydm_get_thermal_trim_offset_8197g(void *dm_void)
+static void phydm_get_thermal_trim_offset_8197g(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2220,7 +2220,7 @@ void phydm_get_thermal_trim_offset_8197g(void *dm_void)
 	}
 }
 
-void phydm_set_power_trim_offset_8197g(void *dm_void)
+static void phydm_set_power_trim_offset_8197g(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2254,7 +2254,7 @@ void phydm_set_power_trim_offset_8197g(void *dm_void)
 
 }
 
-void phydm_get_set_power_trim_offset_8197g(void *dm_void)
+static void phydm_get_set_power_trim_offset_8197g(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2295,7 +2295,7 @@ void phydm_get_set_power_trim_offset_8197g(void *dm_void)
 	}
 }
 
-void phydm_get_tssi_trim_offset_8197g(void *dm_void)
+static void phydm_get_tssi_trim_offset_8197g(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2337,7 +2337,7 @@ void phydm_get_tssi_trim_offset_8197g(void *dm_void)
 	}
 }
 
-s8 phydm_get_tssi_trim_de_8197g(void *dm_void, u8 path)
+static s8 phydm_get_tssi_trim_de_8197g(void *dm_void, u8 path)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2359,7 +2359,7 @@ s8 phydm_get_tssi_trim_de_8197g(void *dm_void, u8 path)
 	return power_trim_info->tssi_trim[group][path];
 }
 
-void phydm_get_set_pa_bias_offset_8197g(void *dm_void)
+static void phydm_get_set_pa_bias_offset_8197g(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2389,7 +2389,7 @@ void phydm_get_set_pa_bias_offset_8197g(void *dm_void)
 	}
 }
 
-void phydm_get_set_lna_offset_8197g(void *dm_void)
+static void phydm_get_set_lna_offset_8197g(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2424,7 +2424,7 @@ void phydm_get_set_lna_offset_8197g(void *dm_void)
 	}
 }
 
-void phydm_set_lna_trim_offset_8197g(void *dm_void, u8 path, u8 cg_cs, u8 enable)
+static void phydm_set_lna_trim_offset_8197g(void *dm_void, u8 path, u8 cg_cs, u8 enable)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *trim = &dm->power_trim_data;
@@ -2452,7 +2452,7 @@ void phydm_set_lna_trim_offset_8197g(void *dm_void, u8 path, u8 cg_cs, u8 enable
 }
 
 
-void phydm_get_thermal_trim_offset_8710c(void *dm_void)
+static void phydm_get_thermal_trim_offset_8710c(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2480,7 +2480,7 @@ void phydm_get_thermal_trim_offset_8710c(void *dm_void)
 		       power_trim_info->thermal);
 }
 
-void phydm_set_power_trim_offset_8710c(void *dm_void)
+static void phydm_set_power_trim_offset_8710c(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2500,7 +2500,7 @@ void phydm_set_power_trim_offset_8710c(void *dm_void)
 	odm_set_rf_reg(dm, RF_PATH_A, RF_0xef, BIT(18), 0);
 }
 
-void phydm_get_set_power_trim_offset_8710c(void *dm_void)
+static void phydm_get_set_power_trim_offset_8710c(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2538,7 +2538,7 @@ void phydm_get_set_power_trim_offset_8710c(void *dm_void)
 	}
 }
 
-void phydm_get_set_pa_bias_offset_8710c(void *dm_void)
+static void phydm_get_set_pa_bias_offset_8710c(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2562,7 +2562,7 @@ void phydm_get_set_pa_bias_offset_8710c(void *dm_void)
 	}
 }
 
-void phydm_set_power_trim_offset_8814b(void *dm_void)
+static void phydm_set_power_trim_offset_8814b(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2629,7 +2629,7 @@ void phydm_set_power_trim_offset_8814b(void *dm_void)
 	}
 }
 
-void phydm_get_set_power_trim_offset_8814b(void *dm_void)
+static void phydm_get_set_power_trim_offset_8814b(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2736,7 +2736,7 @@ void phydm_get_set_power_trim_offset_8814b(void *dm_void)
 	}
 }
 
-void phydm_get_tssi_trim_offset_8814b(void *dm_void)
+static void phydm_get_tssi_trim_offset_8814b(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2859,7 +2859,7 @@ void phydm_get_tssi_trim_offset_8814b(void *dm_void)
 	}
 }
 
-s8 phydm_get_tssi_trim_de_8814b(void *dm_void, u8 path)
+static s8 phydm_get_tssi_trim_de_8814b(void *dm_void, u8 path)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -2893,7 +2893,7 @@ s8 phydm_get_tssi_trim_de_8814b(void *dm_void, u8 path)
 	return power_trim_info->tssi_trim[group][path];
 }
 
-void phydm_set_pabias_bandedge_2g_rf_8814b(void *dm_void)
+static void phydm_set_pabias_bandedge_2g_rf_8814b(void *dm_void)
 {
 #if 0
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -3024,7 +3024,7 @@ void phydm_set_pabias_bandedge_2g_rf_8814b(void *dm_void)
 #endif
 }
 
-void phydm_set_pabias_bandedge_5g_rf_8814b(void *dm_void)
+static void phydm_set_pabias_bandedge_5g_rf_8814b(void *dm_void)
 {
 #if 0
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -3204,7 +3204,7 @@ void phydm_set_pabias_bandedge_5g_rf_8814b(void *dm_void)
 }
 
 
-void phydm_get_pa_bias_offset_8814b(void *dm_void)
+static void phydm_get_pa_bias_offset_8814b(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -3291,7 +3291,7 @@ void phydm_get_pa_bias_offset_8814b(void *dm_void)
 	
 }
 
-void phydm_get_thermal_trim_offset_8814b(void *dm_void)
+static void phydm_get_thermal_trim_offset_8814b(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;
@@ -3348,7 +3348,7 @@ s8 phydm_get_tssi_trim_de(void *dm_void, u8 path)
 		return 0;	
 }
 
-void phydm_do_new_kfree(void *dm_void)
+static void phydm_do_new_kfree(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 
@@ -3405,7 +3405,7 @@ void phydm_do_new_kfree(void *dm_void)
 	}
 }
 
-void phydm_set_kfree_to_rf(void *dm_void, u8 e_rf_path, u8 data)
+static void phydm_set_kfree_to_rf(void *dm_void, u8 e_rf_path, u8 data)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 
@@ -3534,7 +3534,7 @@ s8 phydm_get_multi_thermal_offset(void *dm_void, u8 path)
 		return 0;
 }
 
-void phydm_do_kfree(void *dm_void, u8 channel_to_sw)
+static void phydm_do_kfree(void *dm_void, u8 channel_to_sw)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *pwrtrim = &dm->power_trim_data;
