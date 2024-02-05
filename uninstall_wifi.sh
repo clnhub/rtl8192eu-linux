@@ -1,7 +1,7 @@
 dname=rtl8192eu
 dver=1.0
 dusrdir=/usr/src/$dname-$dver
-dkmsdir=/var/lib/dkms/$dname
+ddkmsdir=/var/lib/dkms/$dname
 sudo rmmod 8192eu
 sudo dkms uninstall -m $dname -v $dver
 sudo dkms remove -m $dname -v $dver
