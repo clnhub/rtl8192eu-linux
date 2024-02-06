@@ -1823,6 +1823,7 @@ void HT_caps_handler_infra_ap(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 }
 #endif /* ROKU_PRIVATE */
 
+__attribute__((no_sanitize("undefined")))
 void HT_caps_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 {
 #ifdef CONFIG_80211N_HT
