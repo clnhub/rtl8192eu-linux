@@ -31,7 +31,7 @@
 #include "phydm_precomp.h"
 
 #ifdef CFG_DIG_DAMPING_CHK
-void phydm_dig_recorder_reset(void *dm_void)
+static void phydm_dig_recorder_reset(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_dig_struct *dig_t = &dm->dm_dig_table;
@@ -43,7 +43,7 @@ void phydm_dig_recorder_reset(void *dm_void)
 		       sizeof(struct phydm_dig_recorder_strcut));
 }
 
-void phydm_dig_recorder(void *dm_void, u8 igi_curr,
+static void phydm_dig_recorder(void *dm_void, u8 igi_curr,
 			u32 fa_cnt)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -95,7 +95,7 @@ void phydm_dig_recorder(void *dm_void, u8 igi_curr,
 		  dig_rc->igi_bitmap);
 }
 
-void phydm_dig_damping_chk(void *dm_void)
+static void phydm_dig_damping_chk(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_dig_struct *dig_t = &dm->dm_dig_table;
@@ -195,7 +195,7 @@ void phydm_dig_damping_chk(void *dm_void)
 }
 #endif
 
-void phydm_fa_threshold_check(void *dm_void, boolean is_dfs_band)
+static void phydm_fa_threshold_check(void *dm_void, boolean is_dfs_band)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_dig_struct *dig_t = &dm->dm_dig_table;
@@ -234,7 +234,7 @@ void phydm_fa_threshold_check(void *dm_void, boolean is_dfs_band)
 		  dig_t->fa_th[1], dig_t->fa_th[2]);
 }
 
-void phydm_set_big_jump_step(void *dm_void, u8 curr_igi)
+static void phydm_set_big_jump_step(void *dm_void, u8 curr_igi)
 {
 #if (RTL8822B_SUPPORT || RTL8197F_SUPPORT || RTL8192F_SUPPORT)
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -427,7 +427,7 @@ void phydm_fa_cnt_statistics_jgr3(void *dm_void)
 
 #endif
 
-void phydm_write_dig_reg_c50(void *dm_void, u8 igi)
+static void phydm_write_dig_reg_c50(void *dm_void, u8 igi)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 
@@ -561,7 +561,7 @@ void odm_write_dig(void *dm_void, u8 new_igi)
 		  new_igi);
 }
 
-u8 phydm_get_igi_reg_val(void *dm_void, enum bb_path path)
+static u8 phydm_get_igi_reg_val(void *dm_void, enum bb_path path)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u32 val = 0;
@@ -652,7 +652,7 @@ void odm_pause_dig(void *dm_void, enum phydm_pause_type type,
 	PHYDM_DBG(dm, DBG_DIG, "DIG pause_result=%d\n", rpt);
 }
 
-boolean
+static boolean
 phydm_dig_abort(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -1021,7 +1021,7 @@ void phydm_dig_init(void *dm_void)
 	phydm_hwigi_init(dm);
 #endif
 }
-void phydm_dig_abs_boundary_decision(struct dm_struct *dm, boolean is_dfs_band)
+static void phydm_dig_abs_boundary_decision(struct dm_struct *dm, boolean is_dfs_band)
 {
 	struct phydm_dig_struct *dig_t = &dm->dm_dig_table;
 	struct phydm_adaptivity_struct *adapt = &dm->adaptivity;
@@ -1082,7 +1082,7 @@ void phydm_dig_abs_boundary_decision(struct dm_struct *dm, boolean is_dfs_band)
 		  dig_t->dm_dig_max, dig_t->dm_dig_min, dig_t->dig_max_of_min);
 }
 
-void phydm_dig_dym_boundary_decision(struct dm_struct *dm, boolean is_dfs_band)
+static void phydm_dig_dym_boundary_decision(struct dm_struct *dm, boolean is_dfs_band)
 {
 	struct phydm_dig_struct *dig_t = &dm->dm_dig_table;
 #ifdef CFG_DIG_DAMPING_CHK
@@ -1163,7 +1163,7 @@ void phydm_dig_dym_boundary_decision(struct dm_struct *dm, boolean is_dfs_band)
 		  dig_t->rx_gain_range_max, dig_t->rx_gain_range_min);
 }
 
-void phydm_dig_abnormal_case(struct dm_struct *dm)
+static void phydm_dig_abnormal_case(struct dm_struct *dm)
 {
 	struct phydm_dig_struct *dig_t = &dm->dm_dig_table;
 
@@ -1175,7 +1175,7 @@ void phydm_dig_abnormal_case(struct dm_struct *dm)
 		  dig_t->rx_gain_range_max, dig_t->rx_gain_range_min);
 }
 
-u8 phydm_new_igi_by_fa(struct dm_struct *dm, u8 igi, u32 fa_cnt, u8 *step_size)
+static u8 phydm_new_igi_by_fa(struct dm_struct *dm, u8 igi, u32 fa_cnt, u8 *step_size)
 {
 	struct phydm_dig_struct *dig_t = &dm->dm_dig_table;
 
@@ -1189,7 +1189,7 @@ u8 phydm_new_igi_by_fa(struct dm_struct *dm, u8 igi, u32 fa_cnt, u8 *step_size)
 	return igi;
 }
 
-u8 phydm_get_new_igi(struct dm_struct *dm, u8 igi, u32 fa_cnt,
+static u8 phydm_get_new_igi(struct dm_struct *dm, u8 igi, u32 fa_cnt,
 		     boolean is_dfs_band)
 {
 	struct phydm_dig_struct *dig_t = &dm->dm_dig_table;
@@ -1288,7 +1288,7 @@ u8 phydm_get_new_igi(struct dm_struct *dm, u8 igi, u32 fa_cnt,
 	return igi;
 }
 
-boolean phydm_dig_dfs_mode_en(void *dm_void)
+static boolean phydm_dig_dfs_mode_en(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	boolean dfs_mode_en = false;
@@ -1444,7 +1444,7 @@ void phydm_dig_by_rssi_lps(void *dm_void)
  * 3 FASLE ALARM CHECK
  * 3============================================================
  */
-void phydm_false_alarm_counter_reg_reset(void *dm_void)
+static void phydm_false_alarm_counter_reg_reset(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_fa_struct *falm_cnt = &dm->false_alm_cnt;
@@ -1540,7 +1540,7 @@ void phydm_false_alarm_counter_reg_reset(void *dm_void)
 #endif /* @#if (ODM_IC_11AC_SERIES_SUPPORT) */
 }
 
-void phydm_false_alarm_counter_reg_hold(void *dm_void)
+static void phydm_false_alarm_counter_reg_hold(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 
@@ -1562,7 +1562,7 @@ void phydm_false_alarm_counter_reg_hold(void *dm_void)
 }
 
 #if (ODM_IC_11N_SERIES_SUPPORT)
-void phydm_fa_cnt_statistics_n(void *dm_void)
+static void phydm_fa_cnt_statistics_n(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_fa_struct *fa_t = &dm->false_alm_cnt;
@@ -1792,7 +1792,7 @@ u32 phydm_get_edcca_report(void *dm_void)
 	return val;
 }
 
-void phydm_get_dbg_port_info(void *dm_void)
+static void phydm_get_dbg_port_info(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_fa_struct *fa_t = &dm->false_alm_cnt;
@@ -1813,7 +1813,7 @@ void phydm_get_dbg_port_info(void *dm_void)
 		  fa_t->dbg_port0, fa_t->edcca_flag);
 }
 
-void phydm_set_crc32_cnt2_rate(void *dm_void, u8 rate_idx)
+static void phydm_set_crc32_cnt2_rate(void *dm_void, u8 rate_idx)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_fa_struct *fa_t = &dm->false_alm_cnt;

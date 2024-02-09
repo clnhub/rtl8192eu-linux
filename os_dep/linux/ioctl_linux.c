@@ -179,6 +179,8 @@ void rtw_request_wps_pbc_event(_adapter *padapter)
 }
 #endif/* #ifdef CONFIG_SUPPORT_HW_WPS_PBC */
 
+void indicate_wx_scan_complete_event(_adapter *padapter);
+
 void indicate_wx_scan_complete_event(_adapter *padapter)
 {
 	union iwreq_data wrqu;
@@ -190,7 +192,7 @@ void indicate_wx_scan_complete_event(_adapter *padapter)
 	wireless_send_event(padapter->pnetdev, SIOCGIWSCAN, &wrqu, NULL);
 #endif
 }
-
+void rtw_indicate_wx_assoc_event(_adapter *padapter);
 
 void rtw_indicate_wx_assoc_event(_adapter *padapter)
 {
@@ -214,6 +216,7 @@ void rtw_indicate_wx_assoc_event(_adapter *padapter)
 	wireless_send_event(padapter->pnetdev, SIOCGIWAP, &wrqu, NULL);
 #endif
 }
+void rtw_indicate_wx_disassoc_event(_adapter *padapter);
 
 void rtw_indicate_wx_disassoc_event(_adapter *padapter)
 {

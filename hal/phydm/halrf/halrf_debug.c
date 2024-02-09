@@ -31,7 +31,7 @@
 #include "mp_precomp.h"
 #include "phydm_precomp.h"
 
-void halrf_basic_profile(void *dm_void, u32 *_used, char *output, u32 *_out_len)
+static void halrf_basic_profile(void *dm_void, u32 *_used, char *output, u32 *_out_len)
 {
 #ifdef CONFIG_PHYDM_DEBUG_FUNCTION
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -139,7 +139,7 @@ void halrf_basic_profile(void *dm_void, u32 *_used, char *output, u32 *_out_len)
 #endif
 }
 
-void halrf_debug_trace(void *dm_void, char input[][16], u32 *_used,
+static void halrf_debug_trace(void *dm_void, char input[][16], u32 *_used,
 		       char *output, u32 *_out_len)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -203,7 +203,7 @@ void halrf_debug_trace(void *dm_void, char input[][16], u32 *_used,
 	*_out_len = out_len;
 }
 
-void halrf_dack_debug_cmd(void *dm_void, char input[][16])
+static void halrf_dack_debug_cmd(void *dm_void, char input[][16])
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct _hal_rf_ *rf = &dm->rf_table;

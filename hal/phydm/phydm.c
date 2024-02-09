@@ -44,7 +44,7 @@ const u16 phy_rate_table[] = {
 	26, 52, 78, 104, 156, 208, 234, 260, 312, 360 /*@4ss MCS0~9*/
 };
 
-void phydm_traffic_load_decision(void *dm_void)
+static void phydm_traffic_load_decision(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u8 shift = 0;
@@ -115,7 +115,7 @@ void phydm_traffic_load_decision(void *dm_void)
 	#endif
 }
 
-void phydm_cck_new_agc_chk(struct dm_struct *dm)
+static void phydm_cck_new_agc_chk(struct dm_struct *dm)
 {
 	u32 new_agc_addr = 0x0;
 
@@ -139,7 +139,7 @@ void phydm_cck_new_agc_chk(struct dm_struct *dm)
 }
 
 /*select 3 or 4 bit LNA */
-void phydm_cck_lna_bit_num_chk(struct dm_struct *dm)
+static void phydm_cck_lna_bit_num_chk(struct dm_struct *dm)
 {
 	boolean report_type = 0;
 	#if (RTL8192E_SUPPORT)
@@ -184,7 +184,7 @@ void phydm_cck_lna_bit_num_chk(struct dm_struct *dm)
 		  dm->cck_agc_report_type);
 }
 
-void phydm_init_cck_setting(struct dm_struct *dm)
+static void phydm_init_cck_setting(struct dm_struct *dm)
 {
 	u32 reg_tmp = 0;
 	u32 mask_tmp = 0;
@@ -231,7 +231,7 @@ void phydm_init_hw_info_by_rfe(struct dm_struct *dm)
 }
 #endif
 
-void phydm_common_info_self_init(struct dm_struct *dm)
+static void phydm_common_info_self_init(struct dm_struct *dm)
 {
 	u32 reg_tmp = 0;
 	u32 mask_tmp = 0;
@@ -365,7 +365,7 @@ void phydm_iot_patch_id_update(void *dm_void, u32 iot_idx, boolean en)
 	}
 }
 
-void phydm_cmn_sta_info_update(void *dm_void, u8 macid)
+static void phydm_cmn_sta_info_update(void *dm_void, u8 macid)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct cmn_sta_info *sta = dm->phydm_sta_info[macid];
@@ -393,7 +393,7 @@ void phydm_cmn_sta_info_update(void *dm_void, u8 macid)
 	ra->is_noisy = dm->noisy_decision;
 }
 
-void phydm_common_info_self_update(struct dm_struct *dm)
+static void phydm_common_info_self_update(struct dm_struct *dm)
 {
 	u8 sta_cnt = 0, num_active_client = 0;
 	u32 i, one_entry_macid = 0;
@@ -484,7 +484,7 @@ void phydm_common_info_self_update(struct dm_struct *dm)
 	dm->pre_is_linked = dm->is_linked;
 }
 
-void phydm_common_info_self_reset(struct dm_struct *dm)
+static void phydm_common_info_self_reset(struct dm_struct *dm)
 {
 	struct odm_phy_dbg_info		*dbg_t = &dm->phy_dbg_info;
 
@@ -527,7 +527,7 @@ phydm_get_structure(struct dm_struct *dm, u8 structure_type)
 	return structure;
 }
 
-void phydm_phy_info_update(struct dm_struct *dm)
+static void phydm_phy_info_update(struct dm_struct *dm)
 {
 #if (RTL8822B_SUPPORT)
 	if (dm->support_ic_type == ODM_RTL8822B)
@@ -535,7 +535,7 @@ void phydm_phy_info_update(struct dm_struct *dm)
 #endif
 }
 
-void phydm_hw_setting(struct dm_struct *dm)
+static void phydm_hw_setting(struct dm_struct *dm)
 {
 #if (RTL8821A_SUPPORT)
 	if (dm->support_ic_type & ODM_RTL8821)
@@ -593,7 +593,7 @@ void phydm_hw_setting(struct dm_struct *dm)
 }
 
 __odm_func__
-boolean phydm_chk_bb_rf_pkg_set_valid(struct dm_struct *dm)
+static boolean phydm_chk_bb_rf_pkg_set_valid(struct dm_struct *dm)
 {
 	boolean valid = true;
 
@@ -924,7 +924,7 @@ u64 phydm_supportability_init_win(
 #endif
 
 #if (DM_ODM_SUPPORT_TYPE & (ODM_CE))
-u64 phydm_supportability_init_ce(void *dm_void)
+static u64 phydm_supportability_init_ce(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u64 support_ability = 0;
@@ -1620,7 +1620,7 @@ void phydm_fwoffload_ability_clear(struct dm_struct *dm,
 		  dm->fw_offload_ability);
 }
 
-void phydm_supportability_init(void *dm_void)
+static void phydm_supportability_init(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u64 support_ability;
@@ -1659,7 +1659,7 @@ void phydm_supportability_init(void *dm_void)
 		  dm->support_ic_type, *dm->mp_mode, dm->support_ability);
 }
 
-void phydm_rfe_init(void *dm_void)
+static void phydm_rfe_init(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 
@@ -2298,7 +2298,7 @@ void phydm_pause_dm_by_asso_pkt(struct dm_struct *dm,
 	}
 }
 
-u8 phydm_stop_dm_watchdog_check(void *dm_void)
+static u8 phydm_stop_dm_watchdog_check(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 

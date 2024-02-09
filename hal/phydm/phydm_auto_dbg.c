@@ -32,7 +32,7 @@
 
 #ifdef PHYDM_AUTO_DEGBUG
 
-void phydm_check_hang_reset(
+static void phydm_check_hang_reset(
 	void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -44,7 +44,7 @@ void phydm_check_hang_reset(
 	dm->debug_components &= (~ODM_COMP_API);
 }
 
-void phydm_check_hang_init(
+static void phydm_check_hang_init(
 	void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -56,7 +56,7 @@ void phydm_check_hang_init(
 }
 
 #if (ODM_IC_11N_SERIES_SUPPORT == 1)
-void phydm_auto_check_hang_engine_n(
+static void phydm_auto_check_hang_engine_n(
 	void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -302,7 +302,7 @@ void phydm_auto_check_hang_engine_n(
 	atd_t->dbg_step++;
 }
 
-void phydm_bb_auto_check_hang_start_n(
+static void phydm_bb_auto_check_hang_start_n(
 	void *dm_void,
 	u32 *_used,
 	char *output,
@@ -330,7 +330,7 @@ void phydm_bb_auto_check_hang_start_n(
 	*_out_len = out_len;
 }
 
-void phydm_dbg_port_dump_n(void *dm_void, u32 *_used, char *output,
+static void phydm_dbg_port_dump_n(void *dm_void, u32 *_used, char *output,
 			   u32 *_out_len)
 {
 	u32 value32 = 0;

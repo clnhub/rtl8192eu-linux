@@ -20,7 +20,7 @@
 #include "mp_precomp.h"
 #include "phydm_precomp.h"
 
-u64 _sqrt(u64 x)
+static u64 _sqrt(u64 x)
 {
 	u64 i = 0;
 	u64 j = (x >> 1) + 1;
@@ -41,7 +41,7 @@ u64 _sqrt(u64 x)
 	return j;
 }
 
-u32 halrf_get_psd_data(
+static u32 halrf_get_psd_data(
 	struct dm_struct *dm,
 	u32 point)
 {
@@ -108,7 +108,7 @@ u32 halrf_get_psd_data(
 	return psd_val;
 }
 
-void halrf_psd(
+static void halrf_psd(
 	struct dm_struct *dm,
 	u32 point,
 	u32 start_point,
@@ -214,7 +214,7 @@ void halrf_psd(
 		odm_set_bb_reg(dm, psd_reg, 0x3000, avg_org);
 }
 
-void backup_bb_register(struct dm_struct *dm, u32 *bb_backup, u32 *backup_bb_reg, u32 counter)
+static void backup_bb_register(struct dm_struct *dm, u32 *bb_backup, u32 *backup_bb_reg, u32 counter)
 {
 	u32 i ;
 
@@ -222,7 +222,7 @@ void backup_bb_register(struct dm_struct *dm, u32 *bb_backup, u32 *backup_bb_reg
 		bb_backup[i] = odm_get_bb_reg(dm, backup_bb_reg[i], MASKDWORD);
 }
 
-void restore_bb_register(struct dm_struct *dm, u32 *bb_backup, u32 *backup_bb_reg, u32 counter)
+static void restore_bb_register(struct dm_struct *dm, u32 *bb_backup, u32 *backup_bb_reg, u32 counter)
 {
 	u32 i ;
 
@@ -232,7 +232,7 @@ void restore_bb_register(struct dm_struct *dm, u32 *bb_backup, u32 *backup_bb_re
 
 
 
-void _halrf_psd_iqk_init(struct dm_struct *dm)
+static void _halrf_psd_iqk_init(struct dm_struct *dm)
 {
 	odm_set_bb_reg(dm, 0x1b04, MASKDWORD, 0x0);
 	odm_set_bb_reg(dm, 0x1b08, MASKDWORD, 0x80);
@@ -261,7 +261,7 @@ void _halrf_psd_iqk_init(struct dm_struct *dm)
 }
 
 
-u32 halrf_get_iqk_psd_data(
+static u32 halrf_get_iqk_psd_data(
 	struct dm_struct *dm,
 	u32 point)
 {
@@ -337,7 +337,7 @@ u32 halrf_get_iqk_psd_data(
 	return psd_val;
 }
 
-void halrf_iqk_psd(
+static void halrf_iqk_psd(
 	struct dm_struct *dm,
 	u32 point,
 	u32 start_point,

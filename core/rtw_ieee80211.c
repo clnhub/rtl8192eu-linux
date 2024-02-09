@@ -472,7 +472,7 @@ void rtw_set_supported_rate(u8 *SupportedRates, uint mode)
 	}
 }
 
-void rtw_filter_suppport_rateie(WLAN_BSSID_EX *pbss_network, u8 keep)
+static void rtw_filter_suppport_rateie(WLAN_BSSID_EX *pbss_network, u8 keep)
 {
 	u8 i, idx = 0, new_rate[NDIS_802_11_LENGTH_RATES_EX], *p;
 	uint iscck, isofdm, ie_orilen = 0, remain_len;
@@ -742,7 +742,7 @@ int rtw_get_rsn_cipher_suite(u8 *s)
 	return 0;
 }
 
-u32 rtw_get_akm_suite_bitmap(u8 *s)
+static u32 rtw_get_akm_suite_bitmap(u8 *s)
 {
 	if (_rtw_memcmp(s, WLAN_AKM_8021X, RSN_SELECTOR_LEN) == _TRUE)
 		return WLAN_AKM_TYPE_8021X;
@@ -2145,7 +2145,7 @@ int rtw_p2p_merge_ies(u8 *in_ie, u32 in_len, u8 *merge_ie)
 	return 0;
 }
 
-void dump_p2p_ie(void *sel, const u8 *ie, u32 ie_len)
+static void dump_p2p_ie(void *sel, const u8 *ie, u32 ie_len)
 {
 	const u8 *pos = ie;
 	u8 id;
@@ -2597,7 +2597,7 @@ void rtw_bss_ex_del_wfd_ie(WLAN_BSSID_EX *bss_ex)
 }
 
 #ifdef CONFIG_WFD
-void dump_wfd_ie(void *sel, const u8 *ie, u32 ie_len)
+static void dump_wfd_ie(void *sel, const u8 *ie, u32 ie_len)
 {
 	const u8 *pos = ie;
 	u8 id;

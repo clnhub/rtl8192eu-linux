@@ -410,7 +410,7 @@ bool rtw_is_channel_plan_valid(u8 id)
 	return id < RTW_ChannelPlanMap_size && !rtw_chplan_is_empty(id);
 }
 
-bool rtw_regsty_is_excl_chs(struct registry_priv *regsty, u8 ch)
+static bool rtw_regsty_is_excl_chs(struct registry_priv *regsty, u8 ch)
 {
 	int i;
 
