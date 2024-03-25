@@ -462,7 +462,7 @@ u8 rtw_cfg80211_ch_switch_notify(_adapter *adapter, u8 ch, u8 bw, u8 offset,
 	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 11, 0))
 		, false
 	#endif
-	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 3, 0))
+	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 3, 0)) && (LINUX_VERSION_CODE < KERNEL_VERSION(6, 9, 0))
 		, 0
 	#endif						  
 		);
@@ -477,7 +477,7 @@ u8 rtw_cfg80211_ch_switch_notify(_adapter *adapter, u8 ch, u8 bw, u8 offset,
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 2) || (defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE >= 2306))
 	,0
 #endif
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 3, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 3, 0)) && (LINUX_VERSION_CODE < KERNEL_VERSION(6, 9, 0))
 	, 0
 #endif				  
 	);
