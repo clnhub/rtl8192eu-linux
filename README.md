@@ -90,3 +90,13 @@ To enroll use:
 sudo mokutil --import [public_key]
 ```
 After reboot, you can enroll the key.
+
+
+### Troubleshooting
+
+If you open an issue because the driver is not working, please post the data shown below
+
+0. kernel version & distribution name/version
+1. output of `make.log` file if it does not compile
+2. output of `lsusb`  and `lsmod | grep 8192eu` commands if it does compile but does not work
+   
