@@ -1666,7 +1666,7 @@ exit:
 	return ret;
 }
 #endif /* CONFIG_AP_MODE */
-__attribute__((no_sanitize("undefined")))
+__attribute__((no_sanitize("bounds")))
 static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param *param)
 {
 	int ret = 0;
