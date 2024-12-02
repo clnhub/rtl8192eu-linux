@@ -1,7 +1,7 @@
 ## rtl8192eu-linux
 Realtek rtl8192eu official Linux driver v5.11.2.1
 
-This driver is based on the (latest) official and manufacturer supported Realtek v5.11.2.1 driver with fixes and improvements to support the latest kernels (>=5, up to 6.12).
+This driver is based on the (latest) official and manufacturer supported Realtek v5.11.2.1 driver with fixes and improvements to support the latest kernels (>=5, up to 6.13).
 
 ### Before installing
 
@@ -94,9 +94,13 @@ After reboot, you can enroll the key.
 
 ### Troubleshooting
 
-If you open an issue because the driver is not working, please post the data shown below
+If you open an issue because the driver is not working, please post:
 
-0. kernel version & distribution name/version
-1. output of `make.log` file if it does not compile
-2. output of `lsusb`  and `lsmod | grep 8192eu` commands if it does compile but does not work
+1. kernel version & distribution name/version
+2. output of `make.log` file if it does not compile
+3. output of `lsusb`  and `lsmod | grep 8192eu` commands if it does compile but does not work
+4. (limited) output of `sudo dmesg | grep -i 8192eu` command
+
+Also, please check that your device is in "wifi" mode ([issue #68](https://github.com/clnhub/rtl8192eu-linux/issues/68)). Some newer devices can have multiple modes.
+
    
