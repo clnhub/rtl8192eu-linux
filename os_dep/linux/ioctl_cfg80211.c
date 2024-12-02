@@ -1666,7 +1666,7 @@ exit:
 	return ret;
 }
 #endif /* CONFIG_AP_MODE */
-
+__attribute__((no_sanitize("undefined")))
 static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param *param)
 {
 	int ret = 0;
@@ -6881,9 +6881,12 @@ static void rtw_get_chbwoff_from_cfg80211_chan_def(
 
 static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
-	, struct cfg80211_chan_def *chandef
+  #if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0))
+        , struct net_device *netdev
+  #endif
+        , struct cfg80211_chan_def *chandef
 #else
-	, struct ieee80211_channel *chan
+	, struct ieee80211_channel *chan	
 	, enum nl80211_channel_type channel_type
 #endif
 	)
