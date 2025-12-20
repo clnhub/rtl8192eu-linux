@@ -7,6 +7,7 @@ ccflags-y += -O1
 #ccflags-y += -Wshadow -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wmissing-prototypes
 ccflags-y += -Wmissing-prototypes
 ccflags-y += -Werror=missing-prototypes
+ccflags-y += -Wno-error=date-time
 
 ccflags-y += -Wno-unused-variable
 #ccflags-y += -Wno-unused-value
