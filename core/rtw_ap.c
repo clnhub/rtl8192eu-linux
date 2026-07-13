@@ -5544,7 +5544,12 @@ static bool rtw_ap_data_bmc_to_uc(_adapter *adapter
 
 		sta = LIST_CONTAINOR(list, struct sta_info, asoc_list);
 		list = get_next(list);
-	
+
+		if (b2u_sta_num >= NUM_STA) {
+			bmc_need = _TRUE;
+			break;
+		}
+
 		stainfo_offset = rtw_stainfo_offset(stapriv, sta);
 		if (stainfo_offset_valid(stainfo_offset))
 			b2u_sta_id[b2u_sta_num++] = stainfo_offset;
