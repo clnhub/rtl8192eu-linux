@@ -5806,7 +5806,6 @@ static int rtw_rereg_nd_name(struct net_device *dev,
 			reg_ifname = padapter->registrypriv.if2name;
 
 		strscpy(rereg_priv->old_ifname, reg_ifname, IFNAMSIZ);
-		rereg_priv->old_ifname[IFNAMSIZ - 1] = 0;
 	}
 
 	/* RTW_INFO("%s wrqu->data.length:%d\n", __FUNCTION__, wrqu->data.length); */
@@ -5831,7 +5830,6 @@ static int rtw_rereg_nd_name(struct net_device *dev,
 	}
 
 	strscpy(rereg_priv->old_ifname, new_ifname, IFNAMSIZ);
-	rereg_priv->old_ifname[IFNAMSIZ - 1] = 0;
 
 	if (_rtw_memcmp(new_ifname, "disable%d", 9) == _TRUE) {
 
