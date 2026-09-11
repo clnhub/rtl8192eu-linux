@@ -31,6 +31,12 @@ Also, make sure you have headers, build, dkms and git packages installed.
 
 ```sudo zypper install -t pattern devel_C_C++ && sudo zypper install dkms git```
 
+##### Alpine Linux:
+
+The package rtl8192eu-src is available in testing repository.
+
+```doas apk add rtl8192eu-src@testing akms```
+
 ##### Raspberry Pi:
 
 ```sudo apt-get install git raspberrypi-kernel-headers build-essential dkms git```
