@@ -96,6 +96,18 @@ CONFIG_RTW_MBO = n
 # CONFIG_RTW_ANDROID - 0: no Android, 4/5/6/7/8/9/10/11 : Android version
 CONFIG_RTW_ANDROID = 0
 
+KDIR ?= /lib/modules/$(shell uname -r)/build
+KREL := $(shell make -s -C $(KDIR) kernelrelease)
+
+UBUNTU_68_ABI := $(shell \
+	abi=$$(printf '%s\n' '$(KREL)' | \
+		sed -n 's/^6\.8\.0-\([0-9][0-9]*\)-generic$$/\1/p'); \
+	test -n "$$abi" && test "$$abi" -ge 147 && echo yes)
+
+ifeq ($(UBUNTU_68_ABI),yes)
+ccflags-y += -DRTW_SET_MONITOR_CHANNEL_HAS_NETDEV
+endif
+
 ifeq ($(shell test $(CONFIG_RTW_ANDROID) -gt 0; echo $$?), 0)
 ccflags-y += -DCONFIG_RTW_ANDROID=$(CONFIG_RTW_ANDROID)
 endif
