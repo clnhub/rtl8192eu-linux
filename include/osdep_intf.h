@@ -77,7 +77,11 @@ void rtw_cancel_all_timer(_adapter *padapter);
 uint loadparam(_adapter *adapter);
 
 #ifdef PLATFORM_LINUX
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 4, 0))
+int rtw_siocdevprivate(struct net_device *dev, struct ifreq *rq, void __user *data, int cmd);
+#else
 int rtw_ioctl(struct net_device *dev, struct ifreq *rq, int cmd);
+#endif
 
 int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname);
 struct net_device *rtw_init_netdev(_adapter *padapter);

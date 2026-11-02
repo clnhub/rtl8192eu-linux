@@ -1928,10 +1928,17 @@ static int cfg80211_rtw_add_key(struct wiphy *wiphy, struct net_device *ndev
 #endif
 	, u8 key_index
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) || defined(COMPAT_KERNEL_RELEASE)
+        #if (LINUX_VERSION_CODE < KERNEL_VERSION(7, 4, 0))
 	, bool pairwise
+	#else
+        , enum nl80211_key_type key_type
+        #endif
 #endif
 	, const u8 *mac_addr, struct key_params *params)
 {
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 4, 0))
+        enum nl80211_key_type pairwise = key_type;
+#endif        
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
         struct net_device *ndev = wdev_to_ndev(wdev);       
 #endif
@@ -2099,11 +2106,18 @@ static int cfg80211_rtw_get_key(struct wiphy *wiphy, struct net_device *ndev
 #endif
 	, u8 keyid
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) || defined(COMPAT_KERNEL_RELEASE)
+        #if (LINUX_VERSION_CODE < KERNEL_VERSION(7, 4, 0))
 	, bool pairwise
+	#else
+        , enum nl80211_key_type key_type
+        #endif
 #endif
 	, const u8 *mac_addr, void *cookie
 	, void (*callback)(void *cookie, struct key_params *))
 {
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 4, 0))
+        enum nl80211_key_type pairwise = key_type;
+#endif     
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
         struct net_device *ndev = wdev_to_ndev(wdev);       
 #endif
@@ -2296,11 +2310,17 @@ static int cfg80211_rtw_del_key(struct wiphy *wiphy, struct net_device *ndev,
         int link_id,
 #endif
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) || defined(COMPAT_KERNEL_RELEASE)
-				u8 key_index, bool pairwise, const u8 *mac_addr)
+	u8 key_index
+        #if (LINUX_VERSION_CODE < KERNEL_VERSION(7, 4, 0))
+	, bool pairwise
+	#else
+        , enum nl80211_key_type key_type
+        #endif 
+	, const u8 *mac_addr)
 #else	/* (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) */
 				u8 key_index, const u8 *mac_addr)
 #endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) */
-{
+{  
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
         struct net_device *ndev = wdev_to_ndev(wdev);       
 #endif

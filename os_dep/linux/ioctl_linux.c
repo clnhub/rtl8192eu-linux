@@ -12983,6 +12983,8 @@ static int rtw_ioctl_wext_private(struct net_device *dev, struct ifreq *rq)
 		return rtw_ioctl_standard_wext_private(dev, rq);
 }
 
+int rtw_ioctl(struct net_device *dev, struct ifreq *rq, int cmd);
+
 int rtw_ioctl(struct net_device *dev, struct ifreq *rq, int cmd)
 {
 	struct iwreq *wrq = (struct iwreq *)rq;
@@ -13017,3 +13019,13 @@ int rtw_ioctl(struct net_device *dev, struct ifreq *rq, int cmd)
 
 	return ret;
 }
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 4, 0)
+
+int rtw_siocdevprivate(struct net_device *dev, struct ifreq *rq, void __user *data, int cmd);
+
+int rtw_siocdevprivate(struct net_device *dev, struct ifreq *rq, void __user *data, int cmd)
+{
+	return rtw_ioctl(dev, rq, cmd);
+}
+#endif
