@@ -99,13 +99,34 @@ CONFIG_RTW_ANDROID = 0
 KDIR ?= /lib/modules/$(shell uname -r)/build
 KREL := $(shell make -s -C $(KDIR) kernelrelease)
 
-UBUNTU_68_ABI := $(shell \
-	abi=$$(printf '%s\n' '$(KREL)' | \
-		sed -n 's/^6\.8\.0-\([0-9][0-9]*\)-generic$$/\1/p'); \
-	test -n "$$abi" && test "$$abi" -ge 147 && echo yes)
+CFG80211_HEADER ?= $(KDIR)/include/net/cfg80211.h
+has_monitor_channel_netdev := $(shell \
+	sed -n '/^[[:space:]]*int.*set_monitor_channel/,+2p' "$(CFG80211_HEADER)" | \
+	grep -Eq 'struct[[:space:]]+net_device[[:space:]]*\*[[:space:]]*dev' \
+	&& echo 1 || echo 0)
 
-ifeq ($(UBUNTU_68_ABI),yes)
-ccflags-y += -DRTW_SET_MONITOR_CHANNEL_HAS_NETDEV
+ifeq ($(MAKELEVEL),0)
+$(info CFG80211_HEADER=$(CFG80211_HEADER))
+$(info has_monitor_channel_netdev=$(has_monitor_channel_netdev))
+endif
+
+ifeq ($(has_monitor_channel_netdev),1)
+ccflags-y += -DSET_MONITOR_CHANNEL_HAS_NETDEV
+endif
+
+USB_HEADER ?= $(KDIR)/include/linux/usb.h
+has_usbdrv_driver := $(shell \
+	sed -n '/struct usb_driver[[:space:]]*{/,/^};/p' "$(USB_HEADER)" | \
+	grep -Eq 'struct[[:space:]]+device_driver[[:space:]]+driver[[:space:]]*;' \
+	&& echo 1 || echo 0)
+
+ifeq ($(MAKELEVEL),0)
+$(info USB_HEADER=$(USB_HEADER))
+$(info has_usbdrv_driver=$(has_usbdrv_driver))
+endif
+
+ifeq ($(has_usbdrv_driver),1)
+ccflags-y += -DUSB_DRIVER_HAS_DEVICE_DRIVER
 endif
 
 ifeq ($(shell test $(CONFIG_RTW_ANDROID) -gt 0; echo $$?), 0)
